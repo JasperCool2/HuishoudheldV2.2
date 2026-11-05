@@ -1,0 +1,1823 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Huishoudheld</title>
+<meta name="description" content="Oefen opruim- en huishoudgewoontes met dagmissies, een held die meegroeit, een sorteerspel en reset-sprints.">
+<meta name="theme-color" content="#eef3f4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1a1e" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Huishoudheld">
+<meta name="application-name" content="Huishoudheld">
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: one narrow column like a laminated chore card; Dymo-tape labels mark sections, tabs switch between three ways to play */
+:root{
+  --bg:#eef3f4;          /* tegelwit, licht blauwig */
+  --card:#ffffff;
+  --ink:#16252b;
+  --muted:#5b6f76;
+  --line:#d3dee1;
+  --tape:#1d5f8a;        /* afwasmiddelblauw: Dymo-tape */
+  --tape-ink:#f4fbff;
+  --sponge:#f2c230;      /* sponsgeel: accent */
+  --sponge-ink:#2a2105;
+  --good:#2f8f5b; --bad:#c2453b; --test:#c85a14;
+  --wicker:#e2a65c; --skin:#f4c9a2; --hair:#2a2522; --sil:brightness(0) opacity(.18); --scrub:#3f9d66; --coral:#ee7a60;
+  --f-display:"Rubik Mono One","Arial Black",system-ui,sans-serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1a1e;--card:#172429;--ink:#e6eff1;--muted:#93a8af;--line:#294049;
+  --tape:#2b78ab;--tape-ink:#f4fbff;--sponge:#f2c230;--sponge-ink:#2a2105;--good:#4fbf83;--bad:#e5675c;--test:#f09050;--wicker:#c9904b;--skin:#e8b98f;--sil:brightness(0) invert(1) opacity(.2);--scrub:#3a9460;--coral:#dd6a52;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1a1e;--card:#172429;--ink:#e6eff1;--muted:#93a8af;--line:#294049;
+  --tape:#2b78ab;--tape-ink:#f4fbff;--sponge:#f2c230;--sponge-ink:#2a2105;--good:#4fbf83;--bad:#e5675c;--test:#f09050;--wicker:#c9904b;--skin:#e8b98f;--sil:brightness(0) invert(1) opacity(.2);--scrub:#3a9460;--coral:#dd6a52;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--sponge);outline-offset:2px}
+
+.tape{display:inline-block;background:var(--tape);color:var(--tape-ink);font-family:var(--f-display);font-size:12px;letter-spacing:.14em;
+  text-transform:uppercase;padding:5px 10px 4px;border-radius:2px;transform:rotate(-1.2deg);
+  box-shadow:inset 0 -2px 0 rgba(0,0,0,.18);text-shadow:0 1px 0 rgba(0,0,0,.25)}
+
+header{display:flex;flex-direction:column;gap:14px}
+h1{font-family:var(--f-display);font-size:clamp(28px,8vw,40px);line-height:1;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1 span{background:var(--sponge);color:var(--sponge-ink);padding:0 .12em;border-radius:3px}
+.stats{display:grid;grid-template-columns:1fr auto;gap:10px 16px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.lvl{font-weight:800;font-size:15px;grid-column:2/-1;grid-row:1;min-width:0;overflow-wrap:break-word;hyphens:auto}
+.lvl small{display:block;font-weight:500;color:var(--muted);font-size:13px}
+.stats .hero{grid-row:1/span 4}
+.streak{grid-column:2/-1;grid-row:4;text-align:left;font-family:var(--f-mono);font-weight:700;font-size:14px;font-variant-numeric:tabular-nums;white-space:nowrap;align-self:start}
+.streak small{display:inline;margin-left:4px;font-family:var(--f-body);font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.bar{grid-column:2/-1;grid-row:2;align-self:center;height:10px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--sponge);width:0;transition:width .5s ease}
+[hidden]{display:none!important}
+.xpline{grid-column:2/-1;grid-row:3;min-width:0;font-family:var(--f-mono);font-size:12px;color:var(--muted);margin-top:-4px;font-variant-numeric:tabular-nums}
+
+.week{display:grid;grid-template-columns:repeat(7,1fr);background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.week div{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 2px;border-left:1px solid var(--line);min-width:0}
+.week div:first-child{border-left:0}
+.week .d{font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.05em}
+.week .n{font-family:var(--f-mono);font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+.week .c{font-family:var(--f-mono);font-size:11px;color:var(--muted);min-height:1.4em;font-variant-numeric:tabular-nums}
+.week .c.ok{color:var(--good);font-weight:700}
+.week .today{background:var(--tape);color:var(--tape-ink);border-left-color:var(--tape)}
+.week .today + div{border-left-color:var(--tape)}
+.week .today .c{color:var(--tape-ink)}
+.week .future .n,.week .future .d{opacity:.55}
+
+nav{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:5px}
+nav button{border:0;background:transparent;padding:10px 4px;border-radius:7px;font-weight:700;font-size:14px;color:var(--muted)}
+nav button[aria-selected="true"]{background:var(--tape);color:var(--tape-ink)}
+
+section{display:flex;flex-direction:column;gap:14px}
+.lead{margin:0;color:var(--muted);font-size:15px;max-width:60ch}
+
+/* habits */
+.habits{list-style:none;margin:0;padding:0;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.habits li{border-top:1px solid var(--line)}
+.habits li:first-child{border-top:0}
+.habit{display:grid;grid-template-columns:28px 1fr auto;gap:12px;align-items:center;width:100%;text-align:left;border:0;background:transparent;padding:13px 14px}
+.box{width:24px;height:24px;border:2px solid var(--muted);border-radius:6px;display:grid;place-items:center;transition:.15s}
+.habit .t{font-weight:600;min-width:0}
+.habit .t small{display:block;color:var(--muted);font-weight:400;font-size:13px}
+.xp{font-family:var(--f-mono);font-size:13px;font-weight:700;color:var(--tape)}
+.habit.done .box{background:var(--good);border-color:var(--good)}
+.habit.done .box::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.habit.done .t{text-decoration:line-through;text-decoration-color:var(--muted);color:var(--muted)}
+.habit.done .xp{color:var(--muted)}
+.xp{text-align:right;line-height:1.2}
+.xp small{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-top:3px}
+.addrow{display:flex;gap:8px}
+.addrow input{flex:1;min-width:0;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+.btn{border:0;border-radius:8px;padding:11px 16px;font-weight:800;background:var(--sponge);color:var(--sponge-ink);box-shadow:inset 0 -3px 0 rgba(0,0,0,.15)}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink);box-shadow:none}
+.btn:active{transform:translateY(1px)}
+.daynote{font-size:14px;color:var(--muted);margin:0}
+.daynote b{color:var(--ink)}
+
+/* sorting game */
+.gamebar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.gamebar .nums{display:flex;gap:16px;font-family:var(--f-mono);font-weight:700;font-variant-numeric:tabular-nums}
+.gamebar .nums small{font-family:var(--f-body);color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.05em;margin-right:4px}
+.floor{background:var(--card);border:1px dashed var(--muted);border-radius:10px;min-height:150px;padding:14px;display:flex;flex-wrap:wrap;gap:10px;align-content:flex-start;position:relative}
+.floor .hint{color:var(--muted);font-size:14px;margin:auto;text-align:center}
+.item{border:2px solid var(--line);background:var(--bg);border-radius:10px;padding:6px 10px;display:flex;align-items:center;gap:6px;font-weight:600;font-size:14px}
+.item .e{font-size:22px;line-height:1}
+.item[aria-pressed="true"]{border-color:var(--sponge);background:var(--sponge);color:var(--sponge-ink)}
+.zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:8px}
+.zone{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:12px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;font-weight:700;font-size:13px}
+.zone .e{font-size:26px;line-height:1}
+.zone .c{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.zone.ok{animation:ok .4s}.zone.no{animation:no .35s}
+@keyframes ok{50%{background:var(--good);color:#fff}}
+@keyframes no{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.toastline{min-height:24px;font-size:14px;font-weight:600}
+.toastline.good{color:var(--good)}.toastline.bad{color:var(--bad)}
+
+/* sprint */
+.timer{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:22px 16px;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.clock{font-family:var(--f-display);font-size:clamp(48px,16vw,72px);line-height:1;font-variant-numeric:tabular-nums}
+.task{font-size:18px;font-weight:700;max-width:30ch;text-wrap:balance;min-height:2.6em;display:flex;align-items:center}
+.choices{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.choices button[aria-pressed="true"]{background:var(--tape);color:var(--tape-ink);border-color:var(--tape)}
+.ring{width:100%;height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.ring i{display:block;height:100%;background:var(--tape);width:0}
+
+/* intake */
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px 16px;display:flex;flex-direction:column;gap:16px}
+.qtop{display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:var(--f-mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.qtop button{border:0;background:transparent;color:var(--muted);font-family:var(--f-body);font-weight:700;font-size:13px;padding:4px}
+.qbar{height:6px;background:var(--line);border-radius:99px;overflow:hidden}.qbar i{display:block;height:100%;background:var(--tape);transition:width .3s}
+.qask{font-size:14px;color:var(--muted);margin:0}
+.qtitle{font-family:var(--f-display);font-size:clamp(20px,6vw,26px);line-height:1.15;margin:0;text-wrap:balance}
+.qsub{margin:-8px 0 0;color:var(--muted);font-size:15px}
+.answers{display:grid;gap:8px}
+.answers button{display:grid;grid-template-columns:1fr auto;align-items:center;text-align:left;gap:8px;border:1px solid var(--line);background:var(--bg);border-radius:9px;padding:13px 14px;font-weight:700}
+.answers button small{display:block;font-weight:400;color:var(--muted);font-size:13px}
+.answers button[aria-pressed="true"]{border-color:var(--tape);box-shadow:inset 0 0 0 1px var(--tape)}
+.answers .k{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.res{display:flex;flex-direction:column;gap:10px}
+.res h3{margin:6px 0 0;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.res ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.res li{border-left:4px solid var(--sponge);background:var(--bg);border-radius:0 8px 8px 0;padding:10px 12px}
+.res li.lastig{border-left-color:var(--tape)}
+.res li b{display:block}.res li span{font-size:14px;color:var(--muted)}
+.chip{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:99px;margin-left:6px;vertical-align:2px;background:var(--sponge);color:var(--sponge-ink)}
+.chip.lastig{background:var(--tape);color:var(--tape-ink)}
+.habit.done .chip{opacity:.5}
+.linkbtn{border:0;background:transparent;color:var(--tape);font-weight:700;padding:4px 0;text-decoration:underline;text-underline-offset:3px;align-self:flex-start;font-size:14px}
+
+.qgroup{display:flex;flex-direction:column;gap:8px}
+.seg{display:grid;gap:6px}.seg4{grid-template-columns:repeat(4,1fr)}.seg3{grid-template-columns:repeat(3,1fr)}
+.seg button{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:11px 4px;font-weight:700;font-size:14px;min-width:0}
+.seg button[aria-pressed="true"]{background:var(--tape);color:var(--tape-ink);border-color:var(--tape)}
+.qprev{margin:0;font-size:13px;color:var(--muted);font-style:italic}
+.qnext{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.score{display:flex;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.score .big{font-family:var(--f-display);font-size:44px;line-height:1;display:block;font-variant-numeric:tabular-nums}
+.score .lbl{display:block;font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-top:4px}
+.delta{font-family:var(--f-mono);font-weight:700;font-size:22px;font-variant-numeric:tabular-nums}
+.delta.up{color:var(--good)}.delta.down{color:var(--bad)}
+.delta .lbl{font-family:var(--f-body);text-transform:none;letter-spacing:0}
+.checknote{font-size:14px;color:var(--muted);border:1px dashed var(--line);border-radius:8px;padding:10px 12px}
+.checknote{font-weight:500;font-size:15px}
+.checknote b{color:var(--ink);font-weight:500}
+.checknote.due{border:1px solid var(--tape);background:var(--card)}
+.res h3{margin:6px 0 0}
+
+.ladder{display:flex;flex-direction:column;gap:6px}
+.rung{display:grid;grid-template-columns:14px 1fr auto;gap:12px;align-items:center;text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:9px;padding:11px 12px;font-weight:700}
+.rung small{display:block;font-weight:400;color:var(--muted);font-size:13px}
+.rung .rt{min-width:0}
+.rung .dot{width:14px;height:14px;border-radius:50%}
+.r0 .dot{background:var(--good)}.r1 .dot{background:color-mix(in srgb,var(--good) 70%,var(--sponge))}
+.r2 .dot{background:var(--sponge)}.r3 .dot{background:color-mix(in srgb,var(--sponge) 50%,var(--bad))}.r4 .dot{background:var(--bad)}
+.rung .was{font-family:var(--f-mono);font-size:10px;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:2px 6px;white-space:nowrap}
+.rung[aria-pressed="true"]{border-color:var(--tape);box-shadow:inset 0 0 0 1px var(--tape);background:var(--card)}
+
+.habits .grp{display:flex;justify-content:space-between;align-items:center;padding:10px 14px 6px;background:var(--bg);font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--tape)}
+.habits .grp .gc{font-family:var(--f-mono);color:var(--muted);letter-spacing:0;font-variant-numeric:tabular-nums}
+.addrow{display:grid;grid-template-columns:1fr auto;gap:8px}
+.addrow input{grid-column:1/-1;grid-row:1;width:100%;font-size:16px}
+.addrow select{min-width:0;font:inherit;padding:10px 8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+.qcat{margin:0 0 -10px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--tape)}
+.cats{display:flex;flex-direction:column;gap:10px}
+.cat .ch{display:flex;justify-content:space-between;font-size:14px;font-family:var(--f-body)}
+.cat .ch span{font-family:var(--f-mono);font-weight:700;font-variant-numeric:tabular-nums;display:flex;gap:8px}
+.cd.up{color:var(--good)}.cd.down{color:var(--bad)}
+.cbar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:4px}.cbar i{display:block;height:100%;background:var(--tape)}
+
+.ill{display:block;flex:none}
+.ill .o{stroke:var(--ink);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.ill .fy{fill:var(--sponge)}.ill .fb{fill:var(--tape)}.ill .fw{fill:var(--wicker)}.ill .fg{fill:var(--scrub)}.ill .fc{fill:var(--coral)}.ill .fk{fill:var(--card)}.ill .fi{fill:var(--ink)}.ill .fn{fill:none}
+.habits .grp{padding:12px 14px 10px}
+.grp .gt{display:flex;align-items:center;gap:12px;min-width:0}
+.grp .gt .ill{width:44px;height:44px}
+.grp .gt small{display:block;text-transform:none;letter-spacing:0;font-weight:500;font-size:13px;color:var(--muted)}
+.qcat{display:flex;align-items:center;gap:10px;margin:0 0 -6px}
+.qcat .ill{width:52px;height:52px}
+.cat .ch b{display:flex;align-items:center;gap:8px}.cat .ch .ill{width:28px;height:28px}
+.cat .ch{align-items:center}
+
+.quote{margin:0;background:var(--sponge);color:var(--sponge-ink);border-radius:10px;padding:20px 18px 14px;display:flex;flex-direction:column;gap:10px;box-shadow:inset 0 -4px 0 rgba(0,0,0,.12)}
+.quote figcaption{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.75}
+.quote blockquote{margin:0;font-size:clamp(19px,5.4vw,23px);font-weight:700;line-height:1.3;text-wrap:balance}
+.quote .linkbtn{color:var(--sponge-ink)}
+.proof{display:flex;flex-direction:column;gap:2px;font-size:15px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.proof .pl{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--good)}
+.mh{font-family:var(--f-display);font-size:18px;margin:8px 0 -6px;text-wrap:balance}
+.flips{display:flex;flex-direction:column;gap:8px}
+.flip{text-align:left;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:13px 14px;display:grid;gap:6px;font-size:15px}
+.flip .neg{color:var(--muted);font-style:italic}
+.flip .neg::before{content:"“";}.flip .neg::after{content:"”"}
+.flip .pos{display:none;font-weight:700;color:var(--ink);border-top:1px dashed var(--line);padding-top:8px}
+.flip .pos::before{content:"Probeer: ";color:var(--good)}
+.flip[aria-pressed="true"]{border-color:var(--good)}
+.flip[aria-pressed="true"] .neg{text-decoration:line-through;text-decoration-color:var(--muted)}
+.flip[aria-pressed="true"] .pos{display:block}
+.minds{list-style:none;margin:0;padding:0;counter-reset:m;background:var(--card);border:1px solid var(--line);border-radius:10px}
+.minds li{counter-increment:m;display:grid;grid-template-columns:28px 1fr;gap:2px 10px;padding:12px 14px;border-top:1px solid var(--line)}
+.minds li:first-child{border-top:0}
+.minds li::before{content:counter(m);grid-row:span 2;font-family:var(--f-display);color:var(--tape);font-size:18px;line-height:1.3}
+.minds b{font-size:15px}.minds span{font-size:14px;color:var(--muted)}
+nav button{font-size:13px}
+
+.stats{grid-template-columns:auto 1fr auto}
+.hero{grid-row:1/span 3;grid-column:1;border:0;background:var(--bg);border-radius:10px;padding:4px;width:84px;height:100px;display:grid;place-items:center}
+.herosvg{width:76px;height:95px;animation:bob 3s ease-in-out infinite}
+.ill .fs{fill:var(--skin)}
+.hero.jump .herosvg{animation:jump .6s ease}
+@keyframes bob{50%{transform:translateY(-2px)}}
+@keyframes jump{30%{transform:translateY(-12px) rotate(-4deg)}60%{transform:translateY(0)}80%{transform:translateY(-4px)}}
+
+.gdiff{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.gdiff button{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:8px 4px;font-weight:700;font-size:14px;line-height:1.2}
+.gdiff button small{display:block;font-weight:500;font-size:12px;color:var(--muted)}
+.gdiff button[aria-pressed="true"]{background:var(--tape);color:var(--tape-ink);border-color:var(--tape)}
+.gdiff button[aria-pressed="true"] small{color:var(--tape-ink)}
+.gdiff.locked button{opacity:.5;pointer-events:none}
+
+nav{gap:3px}nav button{font-size:12px;padding:10px 2px}
+.disclaimer{margin:0;font-size:13px;color:var(--muted);border:1px dashed var(--line);border-radius:8px;padding:8px 12px}
+.disclaimer b{color:var(--ink)}
+.types{display:flex;flex-direction:column;gap:8px}
+.tcard{background:var(--card);border:1px solid var(--line);border-radius:10px}
+.tcard summary{list-style:none;cursor:pointer;padding:12px 40px 12px 14px;position:relative;display:flex;flex-direction:column;gap:2px}
+.tcard summary::-webkit-details-marker{display:none}
+.tcard summary::after{content:"+";position:absolute;right:14px;top:50%;transform:translateY(-50%);font-family:var(--f-display);color:var(--tape);font-size:18px}
+.tcard[open] summary::after{content:"–"}
+.tcard .tn{font-weight:800;font-size:16px}
+.tcard .tq{font-size:14px;color:var(--muted);font-style:italic}
+.tcard dl{margin:0;padding:0 14px 14px;display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:14px}
+.tcard dt{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tape);padding-top:3px}
+.tcard dd{margin:0}
+.tcard dt:nth-of-type(2){color:var(--bad)}.tcard dt:nth-of-type(3){color:var(--good)}
+.hlist,.books{list-style:none;margin:0;padding:0;background:var(--card);border:1px solid var(--line);border-radius:10px}
+.hlist li,.books li{padding:12px 14px;border-top:1px solid var(--line)}
+.hlist li:first-child,.books li:first-child{border-top:0}
+.hlist p,.books p{margin:4px 0 0;font-size:14px;color:var(--muted);max-width:65ch}
+.hlist p b{color:var(--ink)}
+.books .au{font-size:13px;color:var(--muted)}
+@media (max-width:360px){.tcard dl{grid-template-columns:1fr}}
+
+.monthbtn{align-self:flex-end;border:0;background:transparent;color:var(--tape);font-weight:700;font-size:14px;padding:2px 0;margin-top:-6px;text-decoration:underline;text-underline-offset:3px}
+.month{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.mhead{display:flex;justify-content:space-between;align-items:center;font-weight:800;text-transform:capitalize}
+.mhead button{border:1px solid var(--line);background:var(--bg);border-radius:8px;width:36px;height:32px;font-size:18px;font-weight:700;line-height:1}
+.mgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.mdn{text-align:center;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding-bottom:2px}
+.mday{border-radius:7px;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px 0;min-height:44px;font-variant-numeric:tabular-nums}
+.mday b{font-family:var(--f-mono);font-size:14px}
+.mday i{font-style:normal;font-family:var(--f-mono);font-size:10px;color:var(--muted);min-height:1.2em}
+.mday.some{box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--good) 45%,transparent)}
+.mday.ok{background:color-mix(in srgb,var(--good) 22%,var(--bg))}
+.mday.ok i{color:var(--good);font-weight:700}
+.mday.future{opacity:.5}
+.mday.today{background:var(--tape);color:var(--tape-ink)}
+.mday.today i{color:var(--tape-ink)}
+.mlegend{margin:0;font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.lg{display:inline-block;width:12px;height:12px;border-radius:3px;margin-left:6px}
+.lg.ok{background:color-mix(in srgb,var(--good) 22%,var(--bg));margin-left:0}.lg.some{box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--good) 45%,transparent);background:var(--bg)}.lg.now{background:var(--tape)}
+
+.rung{grid-template-columns:44px 1fr auto}
+.face{width:44px;height:44px}
+.face .bgc{fill:color-mix(in srgb,var(--lvc) 28%,transparent)}
+.f0{--lvc:var(--good)}.f1{--lvc:color-mix(in srgb,var(--good) 60%,var(--sponge))}.f2{--lvc:var(--sponge)}.f3{--lvc:color-mix(in srgb,var(--sponge) 50%,var(--bad))}.f4{--lvc:var(--bad)}
+.face .blush{opacity:.55}.face .fdust{fill:color-mix(in srgb,var(--muted) 55%,var(--card))}
+.face .qm,.face .zz{font-family:var(--f-display);font-size:15px;fill:var(--tape)}.face .zz2{font-size:11px}
+.rung[aria-pressed="true"] .face{transform:scale(1.12);transition:transform .15s}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:2px 8px 2px 2px}
+.chip .face{width:18px;height:18px}.chip .face .bgc{fill:transparent}
+
+.chip.wk{background:var(--scrub);color:#fff;border:0;padding:0 8px}
+.habit .chip{height:22px;padding-top:0;padding-bottom:0;vertical-align:middle;line-height:1}
+.herosvg{overflow:visible}
+.padtop{display:flex;gap:16px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px}
+.padfig{width:110px;flex:none;background:var(--bg);border-radius:10px;padding:8px 6px 4px}
+.padfig svg{width:100%;height:auto;display:block;overflow:visible}
+.padinfo{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+.padinfo h2{margin:0;font-family:var(--f-display);font-size:18px;line-height:1.2;text-wrap:balance}
+.padinfo small{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;position:relative}
+.steps::before{content:"";position:absolute;left:33px;top:30px;bottom:30px;width:4px;background:var(--line);border-radius:2px}
+.step{display:flex;gap:14px;align-items:center;padding:6px 0;position:relative}
+.sfig{width:70px;height:84px;flex:none;border-radius:12px;background:var(--card);border:2px solid var(--line);display:grid;place-items:center;position:relative;z-index:1}
+.sfig svg{width:58px;height:72px;overflow:visible}
+.step.locked .sfig svg{filter:var(--sil)}
+.step.got .sfig{border-color:var(--good)}
+.step.cur .sfig{border-color:var(--tape);box-shadow:0 0 0 4px color-mix(in srgb,var(--tape) 25%,transparent)}
+.step.next .sfig{border-style:dashed;border-color:var(--sponge)}
+.stxt{display:flex;flex-direction:column;min-width:0}
+.stxt .slv{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.stxt b{font-size:16px}
+.stxt small{font-size:13px;color:var(--muted);font-family:var(--f-mono)}
+.step.got .stxt small{color:var(--good)}.step.cur .stxt small{color:var(--tape);font-weight:700}.step.next .stxt small{color:var(--ink);font-weight:700}
+.step.locked:not(.next) .stxt b{color:var(--muted)}
+.lvup{position:fixed;inset:0;z-index:50;background:color-mix(in srgb,var(--ink) 55%,transparent);display:grid;place-items:center;
+  padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.lvcard{background:var(--card);border-radius:14px;padding:22px 20px;max-width:360px;width:100%;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;animation:popin .35s ease}
+.lvcard h2{margin:0;font-family:var(--f-display);font-size:20px;line-height:1.2}
+.lvcard p{margin:0;color:var(--muted);font-size:15px}.lvcard p b{color:var(--ink)}
+.lvstage{position:relative;width:170px;height:190px;display:grid;place-items:center}
+.lvstage svg{width:140px;height:175px;position:relative;overflow:visible;animation:jump .7s ease .2s}
+.rays{position:absolute;inset:-10px;border-radius:50%;background:repeating-conic-gradient(color-mix(in srgb,var(--sponge) 55%,transparent) 0 12deg,transparent 12deg 30deg);
+  -webkit-mask:radial-gradient(circle,#000 30%,transparent 70%);mask:radial-gradient(circle,#000 30%,transparent 70%);animation:spin 12s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes popin{from{transform:scale(.8);opacity:0}}
+.ill .fh{fill:var(--hair)}
+.toprow{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.menubtn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--card);border-radius:8px;padding:7px 12px;font-weight:700;font-size:14px}
+.menubtn span{width:14px;height:10px;border-top:2px solid currentColor;border-bottom:2px solid currentColor;position:relative}
+.menubtn span::after{content:"";position:absolute;left:0;right:0;top:2px;border-top:2px solid currentColor}
+.lvl .nm{display:block;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--tape);margin-bottom:1px}
+.maker{display:flex;gap:16px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
+.mkfig{width:130px;flex:none;margin:0 auto;background:var(--bg);border-radius:12px;padding:12px 8px 6px;align-self:flex-start}
+.mkfig svg{width:100%;height:auto;display:block;overflow:visible}
+.mkopts{flex:1 1 200px;min-width:0;display:flex;flex-direction:column;gap:6px}
+.mkl{margin:6px 0 0;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.mkopts input{font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);width:100%}
+.swrow{display:flex;gap:8px;flex-wrap:wrap}
+.swc{width:36px;height:36px;border-radius:50%;border:2px solid var(--line);box-shadow:inset 0 0 0 2px var(--card)}
+.swc[aria-pressed="true"]{border-color:var(--tape);box-shadow:inset 0 0 0 2px var(--card),0 0 0 2px var(--tape)}
+.swh{display:flex;flex-direction:column;align-items:center;gap:2px;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:6px 6px 4px;font-size:12px;font-weight:700;width:68px}
+.swh .ill{width:40px;height:40px;overflow:visible}
+.swh[aria-pressed="true"]{border-color:var(--tape);box-shadow:inset 0 0 0 1px var(--tape);background:var(--card)}
+.mrow{display:flex;gap:8px;flex-wrap:wrap}
+.sheetwrap{place-items:end center}
+.sheet{background:var(--card);border-radius:14px;padding:20px 18px;max-width:440px;width:100%;display:flex;flex-direction:column;gap:12px;animation:popin .25s ease;max-height:100%;overflow:auto}
+@media (min-width:600px){.sheetwrap{place-items:center}}
+.sheet h2{margin:0;font-family:var(--f-display);font-size:20px}
+.mlist{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.mlist button{text-align:left;border:0;border-top:1px solid var(--line);background:transparent;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.mlist button:first-child{border-top:0}
+.mlist button b{font-size:15px}.mlist button small{font-size:13px;color:var(--muted)}
+.mlist .danger b{color:var(--bad)}
+.mnote{margin:0;font-size:14px;color:var(--muted)}
+.sheet textarea{font-family:var(--f-mono);font-size:12px;width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);resize:vertical;word-break:break-all}
+.mstatus{margin:0;font-size:14px;color:var(--good);min-height:1.2em}.mstatus.bad{color:var(--bad)}
+.btn.danger{background:var(--bad);color:#fff}
+.xgrp{display:flex;flex-direction:column;gap:6px}
+.xgh{display:flex;align-items:center;gap:8px;margin:4px 0 0;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tape)}
+.xgh .ill{width:28px;height:28px}
+.xlist{display:flex;flex-direction:column;gap:6px}
+.xopt{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:center;text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:9px;padding:10px 12px;font-weight:700;font-size:15px}
+.xopt small{display:block;font-weight:400;font-size:13px;color:var(--muted)}
+.xopt .xt{min-width:0}
+.xbox{width:22px;height:22px;border:2px solid var(--muted);border-radius:6px;display:grid;place-items:center}
+.xopt[aria-pressed="true"]{border-color:var(--good);background:var(--card)}
+.xopt[aria-pressed="true"] .xbox{background:var(--good);border-color:var(--good)}
+.xopt[aria-pressed="true"] .xbox::after{content:"";width:5px;height:10px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.qnext{align-items:center}
+.topbtns{display:flex;gap:8px;align-items:center}
+.iconbtn{width:38px;height:36px;border:1px solid var(--line);background:var(--card);border-radius:8px;display:grid;place-items:center;padding:0}
+.iconbtn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.iconbtn .slash{stroke:var(--bad);stroke-width:2.4}
+.iconbtn[aria-pressed="true"] .slash{display:none}
+.iconbtn[aria-pressed="false"] .note{opacity:.45}
+.mtoggles{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.tgl{display:flex;justify-content:space-between;align-items:center;border:0;border-top:1px solid var(--line);background:transparent;padding:12px 14px;font-weight:700;font-size:15px;text-align:left}
+.tgl:first-child{border-top:0}
+.tgl i{width:40px;height:24px;border-radius:99px;background:var(--line);position:relative;transition:background .15s;flex:none}
+.tgl i::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--card);box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+.tgl[aria-pressed="true"] i{background:var(--good)}
+.tgl[aria-pressed="true"] i::after{transform:translateX(16px)}
+.credit{text-align:center;font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--muted);padding-top:12px;border-top:1px dashed var(--line);margin-top:8px}
+.mcredit{margin:0;text-align:center;font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--muted)}
+.filepick{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted);font-weight:600}
+.filepick input{font-size:13px;color:var(--ink)}
+.testbar{border:2px dashed var(--test);border-radius:10px;background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--test) 10%,var(--card)) 0 10px,var(--card) 10px 20px);padding:10px 12px;display:flex;flex-direction:column;gap:10px}
+.tbhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tbl{background:var(--test);color:#fff;font-family:var(--f-display);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:4px 8px;border-radius:3px}
+.tbdate{font-size:13px;font-weight:700;flex:1;min-width:0}
+.tbtoggle{border:1px solid var(--test);background:var(--card);color:var(--test);border-radius:8px;padding:6px 10px;font-weight:800;font-size:13px}
+.tbtools{display:flex;flex-direction:column;gap:10px}
+.tbnote{margin:0;font-size:13px;color:var(--muted)}
+.tbgrp{display:flex;flex-direction:column;gap:5px}
+.tbgl{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--test)}
+.tbrow{display:flex;flex-wrap:wrap;gap:6px}
+.tbrow button{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:7px 10px;font-weight:700;font-size:13px}
+.tbrow button[aria-pressed="true"]{background:var(--test);color:#fff;border-color:var(--test)}
+.tbrow .tbstop{border-color:var(--test);color:var(--test)}
+.habits .grp .gt{flex:1}.habits .grp .gc{flex:none;margin-left:10px}
+.habits li.row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center}
+.habits li.row .habit{padding-right:8px}
+.acts{display:flex;gap:6px;padding-right:12px}
+.ab{min-width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:var(--bg);display:grid;place-items:center;padding:0 6px;color:var(--muted)}
+.ab .ai{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ab.star[aria-pressed="true"]{background:var(--coral);border-color:var(--coral);color:#fff}
+.ab.del.confirm{background:var(--bad);border-color:var(--bad);color:#fff;font-weight:800;font-size:13px;padding:0 10px}
+.habits .fgrp{background:color-mix(in srgb,var(--coral) 14%,var(--bg))}
+.habits .fgrp .gt>span{color:color-mix(in srgb,var(--coral) 60%,var(--ink))}
+.habits li.frow{box-shadow:inset 4px 0 0 var(--coral)}
+.chip.own{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.addrate{background:var(--card);border:1px solid var(--tape);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.arq{margin:0;font-weight:700}
+.tpwform{display:flex;flex-direction:column;gap:8px}
+.tpwform input{font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);width:100%}
+.habits .fgrp .fpick{flex:none;margin-left:8px;border:1px solid var(--coral);background:var(--card);color:color-mix(in srgb,var(--coral) 70%,var(--ink));border-radius:8px;padding:6px 10px;font-weight:800;font-size:13px;letter-spacing:0;text-transform:none}
+.flist{max-height:52vh;overflow:auto;padding-right:2px}
+.flist .xopt{grid-template-columns:22px 1fr 34px}
+.flist .xopt .face{width:34px;height:34px}
+.flist .xopt.off{opacity:.45}
+.fcount{margin:0;font-size:14px;font-weight:700;color:var(--tape)}
+.tlink{align-self:center;display:inline-flex;align-items:center;gap:5px;border:0;background:transparent;color:var(--muted);font-size:12px;font-weight:600;padding:2px 6px;margin-top:-6px;opacity:.75}
+.tlink svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tlink:hover,.tlink:focus-visible{opacity:1;color:var(--test)}
+.pop{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);
+  padding:10px 16px;border-radius:99px;font-weight:700;font-size:14px;opacity:0;transition:.25s;pointer-events:none;white-space:nowrap}
+.pop.show{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<style>.verline{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;color:var(--muted);margin-top:-4px}.verline button{border:0;background:transparent;color:var(--tape);font-weight:700;font-size:12px;text-decoration:underline;text-underline-offset:3px;padding:2px}.pwaupd{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;border:0;border-radius:99px;padding:12px 18px;font:700 14px var(--f-body);background:var(--tape);color:var(--tape-ink);box-shadow:0 4px 14px rgba(0,0,0,.2);max-width:calc(100% - 32px)}</style>
+</head>
+<body>
+
+<div class="wrap" lang="nl">
+  <div class="testbar" id="testbar" hidden>
+    <div class="tbhead"><span class="tbl">Testmodus</span><span class="tbdate" id="tbdate"></span><button class="tbtoggle" id="tbtoggle" type="button" aria-expanded="false" aria-controls="tbtools">Testknoppen</button></div>
+    <div class="tbtools" id="tbtools" hidden>
+      <p class="tbnote">Alles wat je hier doet, gebeurt in een aparte testversie. Je echte voortgang blijft onaangeroerd.</p>
+      <div class="tbgrp"><span class="tbgl">Datum</span><div class="tbrow">
+        <button type="button" data-t="d-1">◀ Dag terug</button><button type="button" data-t="d+1">Dag verder ▶</button><button type="button" data-t="d+7">Week verder ▶</button><button type="button" data-t="d0">Echte datum</button></div></div>
+      <div class="tbgrp"><span class="tbgl">XP en level</span><div class="tbrow">
+        <button type="button" data-t="xp50">+50 XP</button><button type="button" data-t="xp500">+500 XP</button><button type="button" data-t="lvl">Volgend level</button></div></div>
+      <div class="tbgrp"><span class="tbgl">Voortgang</span><div class="tbrow">
+        <button type="button" data-t="fill">Vul vorige 14 dagen</button><button type="button" data-t="check">Voortgangscheck nu</button><button type="button" data-t="fast" id="tbfast">Snelle timers</button></div></div>
+      <div class="tbgrp"><span class="tbgl">Opnieuw beginnen</span><div class="tbrow">
+        <button type="button" data-t="fresh">Leeg beginnen</button><button type="button" data-t="copy">Kopie van mijn echte voortgang</button><button type="button" data-t="stop" class="tbstop">Testmodus stoppen</button></div></div>
+    </div>
+  </div>
+  <header>
+    <div class="toprow"><span class="tape">Opruimtraining</span><div class="topbtns"><button class="menubtn" id="menubtn" type="button" aria-label="Menu openen"><span aria-hidden="true"></span>Menu</button></div></div>
+    <h1>Huishoud<span>held</span></h1>
+    <div class="stats" aria-live="polite">
+      <button class="hero" id="hero" type="button" aria-label="Jouw held"></button>
+      <div class="lvl" id="lvl">Level 1 · Beginner<small>Verdien XP met echte klusjes en spelletjes</small></div>
+      <div class="streak" id="streak">0<small>dagen reeks</small></div>
+      <div class="bar"><i id="barfill"></i></div>
+      <div class="xpline" id="xpline">0 / 100 XP</div>
+    </div>
+    <div class="week" id="week" aria-label="Deze week"></div>
+    <button class="monthbtn" id="monthbtn" type="button" aria-expanded="false" aria-controls="month">Hele maand bekijken</button>
+    <div class="month" id="month" hidden>
+      <div class="mhead"><button type="button" id="mprev" aria-label="Vorige maand">‹</button><span id="mtitle"></span><button type="button" id="mnext2" aria-label="Volgende maand">›</button></div>
+      <div class="mgrid" id="mgrid"></div>
+      <p class="mlegend"><span class="lg ok"></span>3 of meer missies <span class="lg some"></span>1 of 2 missies <span class="lg now"></span>vandaag</p>
+    </div>
+  </header>
+
+  <!-- HELD KIEZEN -->
+  <section id="p-held" hidden>
+    <button class="linkbtn" id="mkback" type="button" hidden>← Terug</button>
+    <span class="tape">Kies je held</span>
+    <p class="lead">Wie gaat jouw huis te lijf? Stel je held samen. Hij groeit mee met elke missie die je afvinkt.</p>
+    <div class="maker">
+      <div class="mkfig" id="mkfig"></div>
+      <div class="mkopts">
+        <label class="mkl" for="mkname">Naam</label>
+        <input id="mkname" maxlength="16" placeholder="Bijv. Sam of Kapitein Kruimel" autocomplete="off">
+        <p class="mkl">Kapsel</p><div class="swrow" id="mkhair"></div>
+        <p class="mkl">Haarkleur</p><div class="swrow" id="mkhc"></div>
+        <p class="mkl">Huidskleur</p><div class="swrow" id="mkskin"></div>
+      </div>
+    </div>
+    <div class="mrow"><button class="btn" id="mkok" type="button">Dit is mijn held</button><button class="btn ghost" id="mkrand" type="button">Verras me</button></div>
+  </section>
+
+  <!-- INTAKE -->
+  <section id="p-intake" hidden>
+    <span class="tape">Startvragen</span>
+    <p class="lead" id="intakelead">Beantwoord per klusje hoe het bij jou gaat. Daarmee zet de app missies klaar die passen bij wat jij vergeet of lastig vindt.</p>
+    <div class="qcard" id="qcard"></div>
+  </section>
+
+  <nav role="tablist" aria-label="Spelonderdelen" id="nav">
+    <button role="tab" id="tab-dag" aria-selected="true" data-tab="dag">Vandaag</button>
+    <button role="tab" id="tab-sorteer" aria-selected="false" data-tab="sorteer">Sorteren</button>
+    <button role="tab" id="tab-sprint" aria-selected="false" data-tab="sprint">Sprint</button>
+    <button role="tab" id="tab-mindset" aria-selected="false" data-tab="mindset">Mindset</button>
+    <button role="tab" id="tab-lit" aria-selected="false" data-tab="lit">Literatuur</button>
+  </nav>
+
+  <!-- VANDAAG -->
+  <section id="p-dag">
+    <span class="tape">Dagmissies</span>
+    <p class="lead">Vink af wat je vandaag echt hebt gedaan. Haal er minstens 3 per dag om je reeks vast te houden.</p>
+    <ul class="habits" id="habits"></ul>
+    <p class="daynote" id="daynote"></p>
+    <form class="addrow" id="addform">
+      <select id="newcat" aria-label="Thema">
+        <option value="opruimen">Opruimen</option><option value="huishouden">Huishouden</option><option value="gewoontes" selected>Goede gewoontes</option>
+      </select>
+      <input id="newhabit" maxlength="60" placeholder="Eigen taak, bijv. planten water geven" aria-label="Nieuwe gewoonte">
+      <button class="btn" type="submit">Toevoegen</button>
+    </form>
+    <div class="addrate" id="addrate" hidden></div>
+    <div class="checknote" id="checknote"></div>
+    <button class="btn ghost" id="redo" style="align-self:flex-start">Nu al invullen</button>
+  </section>
+
+  <!-- SORTEERSPEL -->
+  <section id="p-sorteer" hidden>
+    <span class="tape">Alles heeft een vaste plek</span>
+    <p class="lead">Tik een voorwerp aan en daarna de plek waar het hoort. Elke ronde krijg je andere plekken, van kledingkast tot glasbak. Elk goed antwoord is 2 XP, op moeilijk 3 XP. Spelletjes leveren samen hoogstens 50 XP per dag op.</p>
+    <div class="gdiff" id="gdiff" aria-label="Moeilijkheid"></div>
+    <div class="gamebar">
+      <div class="nums"><span><small>Tijd</small><span id="gtime">45</span>s</span><span><small>Goed</small><span id="gscore">0</span></span><span><small>Record</small><span id="gbest">0</span></span></div>
+      <button class="btn" id="gstart">Start ronde</button>
+    </div>
+    <div class="floor" id="floor"><p class="hint">Druk op <b>Start ronde</b>. Er belanden 10 spullen op de vloer. Hieronder zie je de plekken voor deze ronde.</p></div>
+    <div class="zones" id="zones"></div>
+    <div class="toastline" id="gmsg" aria-live="polite"></div>
+  </section>
+
+  <!-- SPRINT -->
+  <section id="p-sprint" hidden>
+    <span class="tape">Reset-sprint</span>
+    <p class="lead">Zet een timer en ruim alleen tot hij afloopt. Kort en vaak werkt beter dan één grote schoonmaak. Elke afgeronde minuut is 5 XP, tot 50 XP per dag samen met het sorteerspel.</p>
+    <div class="timer">
+      <div class="choices" id="choices">
+        <button class="btn ghost" data-min="2" aria-pressed="false">2 min</button>
+        <button class="btn ghost" data-min="5" aria-pressed="true">5 min</button>
+        <button class="btn ghost" data-min="10" aria-pressed="false">10 min</button>
+      </div>
+      <div class="clock" id="clock">05:00</div>
+      <div class="ring"><i id="ringfill"></i></div>
+      <div class="task" id="task">Begin bij het oppervlak dat je het vaakst ziet.</div>
+      <div class="choices">
+        <button class="btn" id="sgo">Start</button>
+        <button class="btn ghost" id="snext">Andere opdracht</button>
+        <button class="btn ghost" id="sstop" hidden>Stop</button>
+      </div>
+    </div>
+  </section>
+  <!-- MINDSET -->
+  <section id="p-mindset" hidden>
+    <span class="tape">Mindset</span>
+    <p class="lead">Beter worden in huishouden gaat vooral over hoe je naar jezelf kijkt. Lees hier iets als je vastloopt, of gewoon om de dag goed te beginnen.</p>
+    <figure class="quote">
+      <figcaption>Gedachte van vandaag</figcaption>
+      <blockquote id="mquote"></blockquote>
+      <button class="linkbtn" id="mnext" type="button">Andere gedachte</button>
+    </figure>
+    <div class="proof" id="proof"></div>
+    <h2 class="mh">Denk het om</h2>
+    <p class="lead">Tik op een gedachte die je herkent.</p>
+    <div class="flips" id="flips"></div>
+    <h2 class="mh">Zes dingen om te onthouden</h2>
+    <ol class="minds" id="minds"></ol>
+  </section>
+  <!-- LITERATUUR -->
+  <section id="p-lit" hidden>
+    <span class="tape">Literatuur</span>
+    <p class="disclaimer"><b>Disclaimer:</b> geschreven door AI. Bedoeld als luchtige uitleg, niet als wetenschappelijk of medisch advies.</p>
+    <p class="lead">Wat weten we eigenlijk over gewoontes? En wat voor opruimer ben jij? Even lezen met een kop thee.</p>
+
+    <h2 class="mh">Welk opruimtype ben jij?</h2>
+    <p class="lead">Deze types zijn met een knipoog verzonnen, geen officiële test. De meeste mensen herkennen zich in twee of drie. Tik op een type.</p>
+    <div class="types">
+      <details class="tcard"><summary><span class="tn">De Bewaarder</span><span class="tq">“Dat kan nog van pas komen.”</span></summary>
+        <dl><dt>Superkracht</dt><dd>Heeft altijd een elastiekje, een schroefje of een doosje op voorraad.</dd><dt>Valkuil</dt><dd>Kasten die stilletjes volstromen met ‘misschien ooit’.</dd><dt>Probeer dit</dt><dd>Eén erin, één eruit: komt er iets nieuws binnen, dan mag er iets anders weg.</dd></dl></details>
+      <details class="tcard"><summary><span class="tn">De Stapelaar</span><span class="tq">“Als ik het niet zie, bestaat het niet.”</span></summary>
+        <dl><dt>Superkracht</dt><dd>Weet precies welke stapel wat is. Echt.</dd><dt>Valkuil</dt><dd>Stapels die stapels krijgen. Opbergen voelt als vergeten.</dd><dt>Probeer dit</dt><dd>Open bakken, doorzichtige dozen en labels. Zo zie je het nog wél.</dd></dl></details>
+      <details class="tcard"><summary><span class="tn">De Perfectionist</span><span class="tq">“Als ik het doe, doe ik het goed.”</span></summary>
+        <dl><dt>Superkracht</dt><dd>Als het af is, is het écht af.</dd><dt>Valkuil</dt><dd>Omdat het perfect moet, begint het vaak niet.</dd><dt>Probeer dit</dt><dd>Zet een timer van 10 minuten en stop als hij gaat. Klaar is beter dan perfect.</dd></dl></details>
+      <details class="tcard"><summary><span class="tn">De Uitsteller</span><span class="tq">“Straks. Na deze aflevering.”</span></summary>
+        <dl><dt>Superkracht</dt><dd>Kan onder tijdsdruk opeens wonderen verrichten.</dd><dt>Valkuil</dt><dd>Straks wordt morgen, en morgen wordt zaterdag.</dd><dt>Probeer dit</dt><dd>Koppel het aan iets wat je al doet en begin met twee minuten. Beginnen is het moeilijkste deel.</dd></dl></details>
+      <details class="tcard"><summary><span class="tn">De Sprinter</span><span class="tq">“Zaterdag pak ik alles in één keer aan.”</span></summary>
+        <dl><dt>Superkracht</dt><dd>Een grote schoonmaak is een feest van daadkracht.</dd><dt>Valkuil</dt><dd>Van maandag tot vrijdag groeit de berg ongestoord.</dd><dt>Probeer dit</dt><dd>Doe elke avond een reset van 5 minuten. Dan wordt zaterdag weer gewoon zaterdag.</dd></dl></details>
+      <details class="tcard"><summary><span class="tn">De Rondstrooier</span><span class="tq">“Waar heb ik m’n sleutels nou weer gelaten?”</span></summary>
+        <dl><dt>Superkracht</dt><dd>Leeft in het moment. Spullen blijven liggen waar het moment ophield.</dd><dt>Valkuil</dt><dd>Elke ochtend een speurtocht.</dd><dt>Probeer dit</dt><dd>Geef alles een vaste plek, zo dicht mogelijk bij waar je het gebruikt. Een schaaltje bij de deur doet wonderen.</dd></dl></details>
+      </div>
+
+    <h2 class="mh">Zo bouw je een gewoonte</h2>
+    <ul class="hlist"><li><b>De gewoontelus</b><p>Elke gewoonte heeft drie stukjes: een <b>signaal</b> (je komt thuis), een <b>actie</b> (sleutels in het schaaltje) en een <b>beloning</b> (morgen niet zoeken). Journalist Charles Duhigg maakte dit idee bekend in <i>The Power of Habit</i>. Wil je een gewoonte, zorg dan voor alle drie.</p></li><li><b>Hoe lang duurt het nou?</b><p>Niet 21 dagen, helaas. In een bekend onderzoek van Phillippa Lally (University College London) duurde het gemiddeld zo’n <b>66 dagen</b> voordat iets automatisch ging, met enorme verschillen: van 18 tot ruim 250 dagen. Goed nieuws uit hetzelfde onderzoek: af en toe een dag missen maakte nauwelijks uit.</p></li><li><b>Als-dan plannen</b><p>Psycholoog Peter Gollwitzer liet zien dat een plan in de vorm ‘als X, dan Y’ veel beter werkt dan een vaag voornemen. Dus niet ‘ik ga vaker opruimen’, maar: <b>als ik koffie zet, dan maak ik het aanrecht leeg</b>.</p></li><li><b>Gewoontes stapelen</b><p>Plak een nieuwe gewoonte vast aan een oude. <b>Na het tandenpoetsen veeg ik de wastafel af.</b> De oude gewoonte werkt dan als wekker voor de nieuwe. Je ziet dit idee onder andere bij BJ Fogg en James Clear.</p></li><li><b>Begin belachelijk klein</b><p>Gedragswetenschapper BJ Fogg (<i>Tiny Habits</i>) raadt aan om zo klein te beginnen dat het bijna grappig is: één bord, één sok. En vier het meteen, met een mini-feestje in je hoofd. Dat goede gevoel helpt de gewoonte te laten wortelen. Elk vinkje in deze app is zo’n mini-feestje.</p></li><li><b>Omgeving wint van wilskracht</b><p>Wilskracht raakt op, je huis blijft. Maak wat je wilt doen <b>makkelijk en zichtbaar</b> (wasmand in de slaapkamer, doekje naast de kraan) en wat je niet wilt <b>lastig</b>. James Clear (<i>Atomic Habits</i>) noemt dit de belangrijkste knop om aan te draaien.</p></li><li><b>Word iemand die…</b><p>Zeg niet ‘ik moet opruimen’, maar ‘ik ben iemand die zijn spullen terugzet’. Elke keer dat je het doet, is een stemmetje voor die nieuwe identiteit. Ook dit is een kernidee uit <i>Atomic Habits</i>.</p></li><li><b>Het frisse-startmoment</b><p>Onderzoekers Hengchen Dai en Katherine Milkman zagen dat mensen vaker aan nieuwe doelen beginnen op ‘frisse’ momenten: een maandag, de eerste van de maand, een verjaardag. Gebruik dat. Je tweewekelijkse check is ook zo’n moment.</p></li></ul>
+
+    <h2 class="mh">Verder lezen</h2>
+    <ul class="books"><li><b>Atomic Habits</b> <span class="au">James Clear</span><p>Over kleine gewoontes met groot effect. Praktisch en vlot geschreven.</p></li><li><b>Tiny Habits</b> <span class="au">BJ Fogg</span><p>Begin zo klein mogelijk en vier elk succesje. Vriendelijk en speels.</p></li><li><b>The Power of Habit</b> <span class="au">Charles Duhigg</span><p>Hoe gewoontes in elkaar zitten, met veel verhalen uit de praktijk.</p></li><li><b>How to Keep House While Drowning</b> <span class="au">KC Davis</span><p>Mild boek voor wie het huishouden zwaar valt. Schoonmaken is een middel, geen maatstaf voor wie je bent.</p></li></ul>
+    <p class="disclaimer">Disclaimer: geschreven door AI. Controleer details bij de oorspronkelijke bronnen.</p>
+  </section>
+  <!-- HELDENPAD -->
+  <section id="p-pad" hidden>
+    <button class="linkbtn" id="padback" type="button">← Terug naar vandaag</button>
+    <span class="tape">Heldenpad</span>
+    <div class="padtop">
+      <div class="padfig" id="padhero"></div>
+      <div class="padinfo"><h2 id="padname"></h2><div class="bar"><i id="padbar"></i></div><small id="padxp"></small></div>
+    </div>
+    <p class="lead" id="padeta"></p>
+    <ol class="steps" id="padsteps"></ol>
+    <p class="lead">Na level 8 krijgt je held elke 1500 XP een gouden ster boven zijn hoofd, tot vijf sterren.</p>
+  </section>
+  <footer class="credit">Made by Jasper with Claude</footer>
+</div>
+<div class="lvup" id="lvup" hidden></div>
+<div class="lvup sheetwrap" id="menu" hidden><div class="sheet" id="menubody" role="dialog" aria-modal="true" aria-label="Menu"></div></div>
+<div class="pop" id="pop" role="status"></div>
+
+<script>
+(function(){
+const REAL_KEY="huishoudheld-v1",TEST_KEY="huishoudheld-test",TM_FLAG="huishoudheld-testmode";
+const lsGet=k=>{try{return localStorage.getItem(k)}catch(e){return null}}, lsSet=(k,v)=>{try{localStorage.setItem(k,v);return true}catch(e){return false}}, lsDel=k=>{try{localStorage.removeItem(k)}catch(e){}};
+const TESTMODE=lsGet(TM_FLAG)==="1";
+const KEY=TESTMODE?TEST_KEY:REAL_KEY;
+const TCFG=(()=>{try{return Object.assign({doff:0,fast:false},JSON.parse(lsGet(TEST_KEY+"-cfg")||"{}"))}catch(e){return {doff:0,fast:false}}})();
+const DOFF=TESTMODE?(Number(TCFG.doff)||0):0, SPD=TESTMODE&&TCFG.fast?60:1;
+/* "nu" volgens het spel: in de testmodus kun je dagen vooruit of terug */
+function nowD(){const d=new Date();if(DOFF)d.setDate(d.getDate()+DOFF);return d}
+/* v = tip als je het vergeet (koppel het aan een vast moment), l = tip als je het lastig vindt (maak het kleiner) */
+const CATS=[{id:"opruimen",t:"Opruimen",s:"Spullen op hun plek"},{id:"huishouden",t:"Huishouden",s:"Schoonmaken, wassen en de keuken"},{id:"gewoontes",t:"Goede gewoontes",s:"Kleine routines die alles makkelijker maken"}];
+/* cartoon-plaatjes per thema (eigen tekeningen, kleuren via thema-tokens) */
+const ILL={
+opruimen:'<svg class="ill" viewBox="0 0 64 64" aria-hidden="true"><g class="o">'+
+  '<path class="fb" d="M17 12l11-2 3 20-11 2z"/><path class="fn" d="M20 16l7-1"/>'+
+  '<path class="fy" d="M35 6h8v13c0 3 2 5 5 6 3 1 3 6-1 6H37c-3 0-4-2-4-5z"/><path class="fn" d="M35 10h8"/>'+
+  '<path class="fw" d="M12 33h40l-4 23H16z"/><rect class="fw" x="9" y="28" width="46" height="7" rx="3.5"/>'+
+  '<path class="fn" d="M13.5 39h37M15.5 52h33"/>'+
+  '</g><circle class="fi" cx="26" cy="44.5" r="2.2"/><circle class="fi" cx="38" cy="44.5" r="2.2"/>'+
+  '<path class="o fn" d="M29 49q3 3 6 0"/><path class="o fn" d="M54 10l2-4M58 15l4-1M51 6l-1-4"/></svg>',
+huishouden:'<svg class="ill" viewBox="0 0 64 64" aria-hidden="true"><g class="o">'+
+  '<circle class="fk" cx="47" cy="15" r="7"/><circle class="fk" cx="34" cy="9" r="4"/><circle class="fk" cx="56" cy="29" r="3.5"/>'+
+  '<rect class="fg" x="8" y="26" width="40" height="10" rx="4"/>'+
+  '<rect class="fy" x="8" y="32" width="40" height="22" rx="6"/>'+
+  '</g><path class="o fn" d="M44 12q2-2 5-1"/>'+
+  '<circle class="fi" cx="22" cy="42" r="2.2"/><circle class="fi" cx="34" cy="42" r="2.2"/>'+
+  '<path class="o fn" d="M25 47q3 3 6 0"/><circle class="fw" cx="14" cy="48" r="1.6"/><circle class="fw" cx="42" cy="38" r="1.6"/><circle class="fw" cx="41" cy="49" r="1.3"/></svg>',
+gewoontes:'<svg class="ill" viewBox="0 0 64 64" aria-hidden="true"><g class="o">'+
+  '<path class="fn" d="M20 52l-5 6M44 52l5 6"/>'+
+  '<circle class="fy" cx="17" cy="16" r="7"/><circle class="fy" cx="47" cy="16" r="7"/>'+
+  '<circle class="fc" cx="32" cy="35" r="20"/><circle class="fk" cx="32" cy="35" r="14"/>'+
+  '<path class="fn" d="M32 35v-8M32 35l6 3"/><path class="fn" d="M32 15v-4M28 11h8"/>'+
+  '</g><circle class="fi" cx="32" cy="35" r="2"/><circle class="fi" cx="26" cy="41" r="1.6"/><circle class="fi" cx="38" cy="41" r="1.6"/>'+
+  '<path class="o fn" d="M29.5 44.5q2.5 2 5 0"/><path class="o fn" d="M5 30l-3-1M6 38l-3 2M59 30l3-1M58 38l3 2"/></svg>'
+};
+/* ---- Gezichtjes van de held per trede ---- */
+const SHORT=["Gaat vanzelf","Kost moeite","Vergeet ik","Stel ik uit","Doe ik zelden"];
+function faceSVG(lv){
+  let g='<svg class="ill face f'+lv+'" viewBox="0 0 48 48" aria-hidden="true"><circle class="bgc" cx="24" cy="24" r="23"/>';
+  const hs=look().hair;g+='<g class="o" transform="translate(-16,-3)">'+hairBack(hs)+'<circle class="fs" cx="40" cy="30" r="14"/>'+hairFront(hs)+'</g>';
+  if(lv===0){ // cool: zonnebril en grote grijns
+    g+='<path class="fi" d="M12 24h10v3.5q-5 4.5-10 0zM26 24h10v3.5q-5 4.5-10 0z"/><path class="o fn" d="M21 25h6"/>';
+    g+='<path class="o fk" d="M18 32.5q6 6.5 12 0z"/><path class="fy o" style="stroke-width:1.5" d="M41 6l1.4 3.6 3.6 1.4-3.6 1.4-1.4 3.6-1.4-3.6-3.6-1.4 3.6-1.4z"/>';
+  }else if(lv===1){ // kost moeite: dichtgeknepen ogen, tanden op elkaar, zweetdruppel
+    g+='<path class="o fn" d="M17 24.5l4.5 2.5-4.5 2.5M31 24.5l-4.5 2.5 4.5 2.5"/>';
+    g+='<rect class="o fk" x="18" y="32" width="12" height="5" rx="2"/><path class="o fn" style="stroke-width:1.5" d="M22 32v5M26 32v5"/>';
+    g+='<path class="o fb" style="stroke-width:1.8" d="M40 13q3.5 5 0 8q-3.5-3 0-8z"/>';
+  }else if(lv===2){ // vergeet: ogen omhoog, wiebelmond, vraagteken
+    g+='<circle class="fk o" style="stroke-width:1.5" cx="19.5" cy="27" r="3.4"/><circle class="fk o" style="stroke-width:1.5" cx="28.5" cy="27" r="3.4"/><circle class="fi" cx="20.3" cy="25.6" r="1.6"/><circle class="fi" cx="29.3" cy="25.6" r="1.6"/>';
+    g+='<path class="o fn" d="M19 35q2.5-2 5 0t5 0"/>';
+    g+='<text x="35" y="14" class="qm">?</text>';
+  }else if(lv===3){ // stel ik uit: slaperig, zzz
+    g+='<path class="o fn" d="M16.5 27q2.5 2.2 5 0M26.5 27q2.5 2.2 5 0"/><ellipse class="fi" cx="24" cy="34" rx="2.2" ry="1.8"/>';
+    g+='<text x="33" y="15" class="zz">z</text><text x="39" y="9" class="zz zz2">Z</text>';
+  }else{ // doe ik zelden: schaapachtig, blosjes, een stofkonijntje als vriend
+    g+='<path class="o fn" d="M17 28q2.5-3 5 0M26 28q2.5-3 5 0"/><path class="o fn" d="M19 34q5 2.2 10-.8"/>';
+    g+='<circle class="fc blush" cx="16" cy="31" r="2.4"/><circle class="fc blush" cx="32" cy="31" r="2.4"/>';
+    g+='<g class="o" style="stroke-width:1.6"><path class="fdust" d="M35 44q-3 0-3-3 0-2 2-3 0-3 3-3 2-2 4 0 3 0 3 3 2 1 2 3 0 3-3 3z"/></g><circle class="fi" cx="37" cy="40" r=".9"/><circle class="fi" cx="41" cy="40" r=".9"/>';
+  }
+  return g+'</svg>';
+}
+
+const CATALOG=[
+  {id:"aanrecht",cat:"opruimen",t:"Aanrecht leeg en afgenomen",s:"Een leeg aanrecht maakt koken makkelijker",xp:10,v:"Doe het terwijl de waterkoker kookt of de koffie doorloopt.",l:"Kies één stuk aanrecht dat altijd leeg blijft en breid dat langzaam uit."},
+  {id:"kleding",cat:"opruimen",t:"Kleding direct opbergen",s:"Geen stoel als tussenkast",xp:10,v:"Bij het uitkleden: vies in de wasmand, schoon terug in de kast. Geen derde optie.",l:"Hang een paar haken op voor 'nog een keer aan'-kleding."},
+  {id:"post",cat:"opruimen",t:"Post en papier meteen verwerken",s:"Weggooien, opbergen of op de actiestapel",xp:10,v:"Open de post staand bij de prullenbak, direct na binnenkomst.",l:"Eén bakje voor 'moet nog iets mee'. Eén keer per week leeg."},
+  {id:"terug",cat:"opruimen",t:"Spullen terugleggen na gebruik",s:"Schaar, oplader, afstandsbediening",xp:10,v:"Geef alles een vaste plek. Wat geen plek heeft, blijft rondslingeren.",l:"Begin met de drie dingen die je het vaakst kwijt bent."},
+  {id:"afwas",cat:"huishouden",t:"Afwas meteen doen",s:"Of de vaatwasser inruimen na het eten",xp:15,v:"Koppel het aan het opstaan van tafel: bord in je hand, dan naar de keuken.",l:"Begin met alleen je eigen bord en glas. Pannen meteen in de week zetten."},
+  {id:"was",cat:"huishouden",t:"Een wasje draaien én opvouwen",s:"Pas klaar als het in de kast ligt",xp:15,v:"Zet een wekker op je telefoon voor als de machine klaar is.",l:"Vouw niet alles: sokken en ondergoed mogen los in een bak."},
+  {id:"afval",cat:"huishouden",freq:"week",t:"Afval op tijd buiten zetten",s:"Rest, papier en plastic op de juiste dag",xp:10,v:"Zet een terugkerende herinnering op de avond voor ophaaldag.",l:"Zet de zak alvast bij de deur zodra hij vol is."},
+  {id:"badkamer",cat:"huishouden",freq:"week",t:"Wastafel en spiegel schoonmaken",s:"Eén keer per week",xp:15,v:"Kies een vaste dag, bijvoorbeeld zaterdagochtend, en zet er een herinnering voor.",l:"Alleen wastafel en spiegel, niet meteen de hele badkamer. Laat doekje en spray in de badkamer staan."},
+  {id:"stofzuigen",cat:"huishouden",freq:"week",t:"Huis stofzuigen",s:"Eén keer per week",xp:20,v:"Koppel het aan een vast moment, zoals vrijdagmiddag of na de weekendboodschappen.",l:"Doe één kamer per dag, of alleen de plekken waar je het meest loopt."},
+  {id:"boodschap",cat:"huishouden",freq:"week",t:"Boodschappenlijst maken",s:"Even in koelkast en kastjes kijken vóór je naar de winkel gaat",xp:10,v:"Maak de lijst op een vaste dag, bijvoorbeeld voor de weekendboodschappen.",l:"Begin met een vaste basislijst die je elke week opnieuw gebruikt."},
+  {id:"bed",cat:"gewoontes",t:"Bed opmaken",s:"Direct na het opstaan",xp:10,v:"Doe het meteen als je voeten de vloer raken, nog vóór je telefoon.",l:"Alleen dekbed recht trekken telt ook. Perfect hoeft niet."},
+  {id:"tweemin",cat:"gewoontes",t:"Tweeminutenregel",s:"Kost het minder dan 2 minuten? Doe het nu",xp:10,v:"Zeg hardop 'twee minuten' als je iets ziet liggen. Dan doe je het ook.",l:"Twijfel je? Zet een timer van 2 minuten en stop als hij afgaat."},
+  {id:"avond",cat:"gewoontes",t:"Avondreset van 10 minuten",s:"Woonkamer en keuken klaar voor morgen",xp:20,v:"Start hem direct na het journaal of je laatste serie-aflevering.",l:"Begin met 5 minuten via de Reset-sprint. Dat is genoeg."},
+  {id:"morgen",cat:"gewoontes",t:"Morgen alvast klaarzetten",s:"Tas, kleding en sleutels voor je gaat slapen",xp:10,v:"Doe het direct na het tandenpoetsen, dan vergeet je het niet.",l:"Alleen je sleutels en tas klaarleggen is ook goed."}
+];
+/* optionele extra taken: kies je zelf in de startvragen */
+const EXTRAS=[
+  {id:"x-speelgoed",cat:"opruimen",t:"Speelgoed opruimen",s:"Aan het eind van de dag terug in de kist",xp:10,v:"Maak het onderdeel van het avondritueel, bijvoorbeeld vlak voor het eten of het badje.",l:"Zet een timer van 3 minuten of maak er een race van. Alles wat er dan nog ligt, mag morgen."},
+  {id:"x-schoenen",cat:"opruimen",t:"Schoenen netjes bij de deur",s:"Niet door het huis laten slingeren",xp:5,v:"Leg een mat of rek direct bij de deur, dan is de juiste plek ook de makkelijkste.",l:"Eén bak bij de deur waar alle schoenen in mogen, netjes zetten hoeft niet."},
+  {id:"x-bureau",cat:"opruimen",t:"Bureau leeg achterlaten",s:"Na het werken of studeren",xp:10,v:"Koppel het aan het dichtklappen van je laptop: pas als het bureau leeg is, ben je klaar.",l:"Ruim alleen het werkblad zelf op. Laden en kastjes zijn voor een andere keer."},
+  {id:"x-tas",cat:"opruimen",t:"Tas uitpakken bij thuiskomst",s:"Bonnetjes, flesjes en lunchbakjes eruit",xp:5,v:"Doe het direct bij thuiskomst, vóór je je jas uittrekt.",l:"Zet een bakje bij de deur waar alles uit je tas in mag. Uitzoeken kan later."},
+  {id:"x-planten",cat:"huishouden",freq:"week",t:"Planten water geven",s:"Even voelen of de aarde droog is",xp:10,v:"Kies een vaste dag, bijvoorbeeld zondag, en zet de gieter op een plek waar je hem ziet.",l:"Begin met alleen de planten in de woonkamer. Een gieter vol is genoeg voor die ronde."},
+  {id:"x-bed",cat:"huishouden",freq:"week",t:"Bed verschonen",s:"Schone lakens en kussensloop",xp:15,v:"Koppel het aan een vaste wasdag en zet een herinnering op je telefoon.",l:"Alleen de sloop verschonen telt ook. De rest volgt volgende week."},
+  {id:"x-wc",cat:"huishouden",freq:"week",t:"Wc schoonmaken",s:"Pot, bril en het knopje",xp:15,v:"Doe het op een vaste dag, direct na het tandenpoetsen.",l:"Leg doekjes of een borstel met middel in de wc zelf, dan ben je in twee minuten klaar."},
+  {id:"x-dweilen",cat:"huishouden",freq:"week",t:"Vloer dweilen",s:"Keuken en badkamer",xp:20,v:"Doe het direct na het stofzuigen, dan ligt de vloer toch al vrij.",l:"Alleen de keukenvloer is ook goed. Een vloerwisser met doekjes gaat sneller dan een emmer."},
+  {id:"x-stof",cat:"huishouden",freq:"week",t:"Stof afnemen",s:"Kasten, vensterbanken en tv-meubel",xp:15,v:"Koppel het aan een vast moment, zoals vrijdagmiddag of tijdens een podcast.",l:"Eén kamer per week is genoeg. Een stofdoek in elke kamer scheelt lopen."},
+  {id:"x-koelkast",cat:"huishouden",freq:"week",t:"Koelkast nalopen",s:"Weg met wat over de datum is",xp:10,v:"Doe het vlak voordat je je boodschappenlijst maakt.",l:"Kijk alleen naar de bovenste plank. De rest volgt volgende keer."},
+  {id:"x-huisdier",cat:"huishouden",t:"Huisdier verzorgen",s:"Voer, vers water en de kattenbak of mand",xp:10,v:"Koppel het aan je eigen ontbijt en avondeten: jij eet, je huisdier ook.",l:"Zet voer, schep en zakjes op één vaste plek, dan is het zo gedaan."},
+  {id:"x-luchten",cat:"gewoontes",t:"Huis luchten",s:"Ramen 10 minuten open",xp:5,v:"Zet de ramen open zodra je je bed hebt opgemaakt.",l:"Eén raam vijf minuten open is ook prima."},
+  {id:"x-menu",cat:"gewoontes",freq:"week",t:"Weekmenu maken",s:"Weet wat je eet en wat je moet kopen",xp:10,v:"Kies een vaste avond, bijvoorbeeld zondag, en doe het samen met de boodschappenlijst.",l:"Plan alleen drie avonden. De rest mag een verrassing zijn."},
+  {id:"x-admin",cat:"gewoontes",freq:"week",t:"Administratie bijwerken",s:"Rekeningen en mail op één vast moment",xp:15,v:"Kies één vast moment per week en zet het in je agenda.",l:"Begin met tien minuten en alleen de post van deze week."}
+];
+const ALLQ=CATALOG.concat(EXTRAS);
+const FOCUS_BONUS=10, MAX_FOCUS=3;
+const GEN_TIP={v:"Koppel het aan iets wat je elke dag al doet, zoals koffie zetten of tandenpoetsen.",l:"Maak het kleiner: doe alleen het eerste stukje, of zet een timer van twee minuten."};
+const isCustom=h=>h&&String(h.id).startsWith("c");
+const DEFAULT_IDS=["bed","afwas","aanrecht","kleding","post","was","tweemin","avond"];
+const DEFAULTS=CATALOG.filter(c=>DEFAULT_IDS.includes(c.id)).map(c=>({id:c.id,cat:c.cat,freq:c.freq,t:c.t,s:c.s,xp:c.xp}));
+function catOf(h){if(h.cat)return h.cat;const c=CATALOG.find(x=>x.id===h.id);return c?c.cat:"gewoontes"}
+const LEVELS=[
+  {t:"Doe ik vanzelf",s:"Ik hoef er niet over na te denken",pts:100,focus:null},
+  {t:"Doe ik, maar het kost moeite",s:"Het lukt, maar ik moet mezelf ertoe zetten",pts:75,focus:"lastig"},
+  {t:"Vergeet ik vaak",s:"Als ik eraan denk, is het zo gedaan",pts:50,focus:"vergeet"},
+  {t:"Stel ik uit",s:"Ik zie ertegen op en schuif het voor me uit",pts:25,focus:"lastig"},
+  {t:"Doe ik bijna nooit",s:"Het komt er gewoon niet van",pts:0,focus:"vergeet"}
+];
+const TITLES=["Beginner","Kruimeljager","Sokkenzoeker","Stofwisser","Vaatwasmeester","Wasmandwinnaar","Opruimkampioen","Huishoudheld"];
+let S={xp:0,habits:DEFAULTS.slice(),days:{}};
+try{const raw=localStorage.getItem(KEY);if(raw){const p=JSON.parse(raw);if(p&&typeof p==="object"&&!Array.isArray(p))S=Object.assign(S,p)}}catch(e){}
+/* oudere of beschadigde saves rechttrekken: elk veld krijgt het type dat het spel verwacht */
+(function fixTypes(){
+  const obj=v=>v&&typeof v==="object"&&!Array.isArray(v);
+  if(typeof S.xp!=="number"||!isFinite(S.xp))S.xp=Number(S.xp)||0;
+  if(!Array.isArray(S.habits))S.habits=DEFAULTS.slice();
+  S.habits=S.habits.filter(h=>obj(h)&&h.id!=null&&h.t).map(h=>Object.assign({},h,{id:String(h.id),xp:Number(h.xp)||10}));
+  if(!obj(S.days))S.days={};
+  for(const k in S.days){if(!Array.isArray(S.days[k]))delete S.days[k];else S.days[k]=S.days[k].map(String)}
+  ["bestBy","bonus","given","xpDay","snd","look"].forEach(k=>{if(S[k]!=null&&!obj(S[k]))delete S[k]});
+  if(S.history!=null&&!Array.isArray(S.history))delete S.history;
+  if(Array.isArray(S.history))S.history=S.history.filter(h=>obj(h)&&typeof h.date==="string"&&obj(h.a));
+  if(S.extras!=null&&!Array.isArray(S.extras))delete S.extras;
+  if(S.profile!=null&&!obj(S.profile))delete S.profile;
+  if(typeof S.name!=="string")delete S.name;
+})();
+S.habits=S.habits.filter(h=>h.id!=="handen"&&h.id!=="plek").map(h=>{const c=CATALOG.find(x=>x.id===h.id);if(!c)return h;
+  return Object.assign({},h,{t:c.t,s:c.s,cat:c.cat,freq:c.freq,tip:h.focus?(h.focus==="lastig"?c.l:c.v):h.tip})});
+if(S.profile){delete S.profile.plek;CATALOG.forEach(c=>{if(!(c.id in S.profile)&&!S.habits.some(h=>h.id===c.id))S.habits.push({id:c.id,cat:c.cat,freq:c.freq,t:c.t,s:c.s,xp:c.xp})})}
+if(S.profile)delete S.profile.handen;
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const $=id=>document.getElementById(id);
+const today=()=>{const d=nowD();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+function dayDone(k){return (S.days[k]||[]).length}
+
+function pop(msg){const p=$("pop");p.textContent=msg;p.classList.add("show");clearTimeout(pop.t);pop.t=setTimeout(()=>p.classList.remove("show"),1800)}
+/* levels: elke stap kost meer XP, zodat de held echt groeit. Na level 8: elke 1500 XP een ster */
+const LV_XP=[0,150,400,800,1350,2050,2900,4000], STAR_XP=1500;
+function lvInfo(xp){
+  let l=0;while(l<LV_XP.length-1&&xp>=LV_XP[l+1])l++;
+  if(l===LV_XP.length-1){const st=Math.floor((xp-LV_XP[l])/STAR_XP),from=LV_XP[l]+st*STAR_XP;return {l:l+st,gear:l,stars:st,from:from,to:from+STAR_XP}}
+  return {l:l,gear:l,stars:0,from:LV_XP[l],to:LV_XP[l+1]};
+}
+function titleOf(i){return TITLES[Math.min(i.l,TITLES.length-1)]+(i.stars?" "+"★".repeat(Math.min(i.stars,5)):"")}
+function addXP(n,why){
+  const before=lvInfo(S.xp);S.xp=Math.max(0,S.xp+n);
+  if(n){S.xpDay=S.xpDay||{};const k=today();S.xpDay[k]=Math.max(0,(S.xpDay[k]||0)+n)}
+  save();renderStats();
+  const after=lvInfo(S.xp);
+  // een level wordt maar één keer gevierd, ook als je iets uit- en weer aanvinkt
+  if(n>0){if(after.l>before.l&&after.l>(S.bestL||0)){S.bestL=after.l;save();showLevelUp(after)}else pop("+"+n+" XP · "+why)}
+  if(!$("p-pad").hidden)renderPad();
+}
+/* spelletjes (sorteren en sprint) geven samen hoogstens BONUS_CAP XP per dag, zodat echte klusjes de held laten groeien */
+const BONUS_CAP=50;
+function bonusXP(n,why){
+  S.bonus=S.bonus||{};const k=today();const used=S.bonus[k]||0;const give=Math.max(0,Math.min(n,BONUS_CAP-used));
+  if(give<=0){pop("Spel-XP voor vandaag is op. Morgen weer!");return 0}
+  S.bonus[k]=used+give;
+  for(const d in S.bonus)if(d<addDays(k,-30))delete S.bonus[d];
+  addXP(give,why+(give<n?" (daglimiet bereikt)":""));return give;
+}
+function streak(){
+  let n=0;const d=nowD();
+  if(dayDone(fmt(d))<3)d.setDate(d.getDate()-1); // vandaag telt nog niet mee als je nog bezig bent
+  while(dayDone(fmt(d))>=3){n++;d.setDate(d.getDate()-1)}
+  return n;
+}
+function fmt(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function renderStats(){
+  const I=lvInfo(S.xp),left=I.to-S.xp,nx=GEAR[I.gear+1];
+  $("lvl").innerHTML='<span class="nm"></span>'+"Level "+(I.l+1)+" · "+titleOf(I)+"<small>"+(nx?"Nog "+left+" XP tot: "+nx.toLowerCase():"Nog "+left+" XP tot je volgende ster")+"</small>";
+  $("lvl").querySelector(".nm").textContent=heroName();
+  renderHero(I);
+  $("barfill").style.width=((S.xp-I.from)/(I.to-I.from)*100)+"%";
+  $("xpline").textContent=(S.xp-I.from)+"/"+(I.to-I.from)+" XP · uitrusting "+I.gear+"/7";
+  $("streak").innerHTML=streak()+"<small>"+(streak()===1?"dag":"dagen")+" reeks</small>";
+  renderWeek();
+}
+function renderWeek(){
+  const names=["ma","di","wo","do","vr","za","zo"];
+  const now=nowD();now.setHours(12,0,0,0);
+  const mon=new Date(now);mon.setDate(now.getDate()-((now.getDay()+6)%7));
+  const w=$("week");w.innerHTML="";
+  for(let i=0;i<7;i++){
+    const d=new Date(mon);d.setDate(mon.getDate()+i);
+    const k=fmt(d),isToday=k===fmt(now),future=d>now&&!isToday;
+    const n=dayDone(k);
+    const cell=document.createElement("div");
+    cell.className=isToday?"today":(future?"future":"");
+    if(isToday)cell.setAttribute("aria-current","date");
+    const c=future?"":(n?n+" ✓":(isToday?"0":"–"));
+    cell.innerHTML='<span class="d">'+names[i]+'</span><span class="n">'+d.getDate()+'</span><span class="c'+(n>=3&&!isToday?' ok':'')+'">'+c+'</span>';
+    cell.title=future?"":n+" missies gedaan";
+    w.appendChild(cell);
+  }
+  if(!$("month").hidden)renderMonth();
+}
+let MV=null;
+function renderMonth(){
+  const now=nowD();now.setHours(12,0,0,0);
+  if(!MV)MV={y:now.getFullYear(),m:now.getMonth()};
+  const first=new Date(MV.y,MV.m,1,12);
+  $("mtitle").textContent=first.toLocaleDateString("nl-NL",{month:"long",year:"numeric"});
+  const g=$("mgrid");g.innerHTML="";
+  ["ma","di","wo","do","vr","za","zo"].forEach(n=>{const h=document.createElement("span");h.className="mdn";h.textContent=n;g.appendChild(h)});
+  const lead=(first.getDay()+6)%7;
+  for(let i=0;i<lead;i++)g.appendChild(document.createElement("span"));
+  const days=new Date(MV.y,MV.m+1,0).getDate();let monthDone=0,good=0;
+  for(let d=1;d<=days;d++){
+    const dt=new Date(MV.y,MV.m,d,12),k=fmt(dt),n=dayDone(k);
+    const isToday=k===fmt(now),future=dt>now&&!isToday;
+    const c=document.createElement("span");
+    c.className="mday"+(isToday?" today":"")+(future?" future":"")+(n>=3?" ok":n?" some":"");
+    c.innerHTML='<b>'+d+'</b><i>'+(future||!n?"":n)+'</i>';
+    c.title=future?"":n+" missies gedaan";
+    if(isToday)c.setAttribute("aria-current","date");
+    g.appendChild(c);monthDone+=n;if(n>=3)good++;
+  }
+  $("mtitle").title=good+" dagen met 3 of meer missies";
+}
+$("monthbtn").onclick=()=>{
+  const m=$("month"),open=m.hidden;m.hidden=!open;
+  $("monthbtn").setAttribute("aria-expanded",open);$("monthbtn").textContent=open?"Maand verbergen":"Hele maand bekijken";
+  if(open){MV=null;renderMonth()}
+};
+$("mprev").onclick=()=>{MV.m--;if(MV.m<0){MV.m=11;MV.y--}renderMonth()};
+$("mnext2").onclick=()=>{MV.m++;if(MV.m>11){MV.m=0;MV.y++}renderMonth()};
+
+/* ---- De held ---- */
+const GEAR=["","Schoonmaakhandschoenen","Heldenmasker","Plumeau","Cape","Borstembleem","Laarzen","Gouden cape en kroon"];
+function heroSVG(L,stars,hs){
+  hs=hs||look().hair;
+  const cape=L>=7?"fy":"fc";
+  let g='<svg class="ill herosvg" viewBox="0 0 80 100" aria-hidden="true"><g class="o">';
+  if(L>=4)g+='<path class="'+cape+'" d="M29 46h22l12 42q-23 7-46 0z"/><path class="fn" d="M40 50l-2 38M47 50l6 36"/>';
+  g+='<rect class="fb" x="31" y="72" width="8" height="16" rx="3"/><rect class="fb" x="41" y="72" width="8" height="16" rx="3"/>';
+  g+=L>=6?'<path class="fg" d="M29 82h11v8H27q-1-5 2-8zM40 82h11q3 3 2 8H40z"/>':'<ellipse class="fi" cx="34" cy="89" rx="5" ry="2.5"/><ellipse class="fi" cx="46" cy="89" rx="5" ry="2.5"/>';
+  g+='<path class="fn" d="M28 52q-9 6-8 16"/>';
+  g+=L>=3?'<path class="fn" d="M52 52q8-2 11-8"/><path class="fn" d="M63 44l6-20"/><circle class="fc" cx="70" cy="20" r="5"/><circle class="fc" cx="65" cy="17" r="4"/><circle class="fc" cx="74" cy="16" r="4"/><circle class="fc" cx="70" cy="13" r="4"/>'
+         :'<path class="fn" d="M52 52q9 6 8 16"/>';
+  g+='<rect class="fk" x="26" y="44" width="28" height="32" rx="10"/>';
+  if(L>=5)g+='<circle class="fy" cx="40" cy="59" r="7"/><path class="fn" d="M37 55v8M43 55v8M37 59h6"/>';
+  const hand=L>=1?"fy":"fs", hr=L>=1?5:4;
+  g+='<circle class="'+hand+'" cx="20" cy="69" r="'+hr+'"/>'+(L>=3?'<circle class="'+hand+'" cx="63" cy="44" r="'+hr+'"/>':'<circle class="'+hand+'" cx="60" cy="69" r="'+hr+'"/>');
+  g+=hairBack(hs)+'<circle class="fs" cx="40" cy="30" r="14"/>'+hairFront(hs);
+  if(L>=2)g+='<path class="fb" d="M26 27q14-4 28 0v7q-14-4-28 0z"/>';
+  if(L>=7)g+='<path class="fy" d="M31 17l1-9 5 5 3-7 3 7 5-5 1 9z"/>';
+  g+='</g>';
+  g+=L>=2?'<circle class="fk" cx="35" cy="30" r="2.6"/><circle class="fk" cx="45" cy="30" r="2.6"/>':'';
+  g+='<circle class="fi" cx="35" cy="30" r="1.7"/><circle class="fi" cx="45" cy="30" r="1.7"/><path class="o fn" d="M36 36q4 4 8 0"/>';
+  if(L>=7)g+='<path class="o fn" d="M10 20v6M7 23h6M70 60v6M67 63h6M12 44v4M10 46h4"/>';
+  for(let i=0;i<Math.min(stars||0,5);i++){const x=40+(i-(Math.min(stars,5)-1)/2)*9;g+='<path class="fy o" style="stroke-width:1.4" d="M'+x+' 0l1.5 3.3 3.6.4-2.7 2.4.8 3.5-3.2-1.8-3.2 1.8.8-3.5-2.7-2.4 3.6-.4z"/>'}
+  return g+'</svg>';
+}
+function renderHero(I){
+  const h=$("hero");h.innerHTML=heroSVG(I.gear,I.stars);
+  h.title="Bekijk je heldenpad";
+  h.onclick=()=>showView("pad");
+}
+function showLevelUp(I){
+  setTimeout(()=>sfx("level"),120);
+  const o=$("lvup");const isGear=I.stars===0&&GEAR[I.gear];
+  o.innerHTML='<div class="lvcard" role="dialog" aria-modal="true" aria-labelledby="lvtitle"><span class="tape">Level omhoog!</span>'+
+    '<div class="lvstage"><div class="rays"></div>'+heroSVG(I.gear,I.stars)+'</div>'+
+    '<h2 id="lvtitle">Level '+(I.l+1)+' · '+titleOf(I)+'</h2>'+
+    '<p>'+(isGear?'Nieuw voor '+heroName().replace(/[<>&]/g,'')+': <b>'+GEAR[I.gear].toLowerCase()+'</b>.':'Je held krijgt er een gouden ster bij.')+
+    (GEAR[I.gear+1]?'<br>Volgende: '+GEAR[I.gear+1].toLowerCase()+' bij '+LV_XP[I.gear+1]+' XP.':(I.stars?'':'<br>Je held is compleet. Vanaf nu verdien je sterren.'))+'</p>'+
+    '<button class="btn" id="lvok" type="button">Verder poetsen</button></div>';
+  o.hidden=false;$("lvok").focus();
+  $("lvok").onclick=()=>{o.hidden=true};
+}
+function renderPad(){
+  const I=lvInfo(S.xp);
+  $("padhero").innerHTML=heroSVG(I.gear,I.stars);
+  $("padname").textContent=heroName()+" · level "+(I.l+1)+" · "+titleOf(I);
+  $("padbar").style.width=((S.xp-I.from)/(I.to-I.from)*100)+"%";
+  $("padxp").textContent=S.xp+" XP verzameld";
+  // tempo: gemiddelde XP per dag over de laatste 7 dagen
+  let sum=0;const d=nowD();for(let i=0;i<7;i++){sum+=(S.xpDay||{})[fmt(d)]||0;d.setDate(d.getDate()-1)}
+  const avg=sum/7, goal=LV_XP[LV_XP.length-1];
+  $("padeta").innerHTML=S.xp>=goal?"Je held is compleet. Elke "+STAR_XP+" XP komt er een gouden ster bij."
+    :(avg>0?"In jouw tempo van de afgelopen week (ongeveer <b>"+Math.round(avg)+" XP per dag</b>) is je held over zo’n <b>"+Math.ceil((goal-S.xp)/avg)+" dagen</b> compleet."
+    :"Nog <b>"+(goal-S.xp)+" XP</b> tot je held compleet is. Vink je eerste missie af en de app rekent uit hoe lang het nog duurt.");
+  const ol=$("padsteps");ol.innerHTML="";
+  for(let i=0;i<LV_XP.length;i++){
+    const got=I.gear>=i, cur=I.gear===i&&I.stars===0, next=I.gear+1===i, last=i===LV_XP.length-1;
+    const li=document.createElement("li");li.className="step"+(got?" got":" locked")+(cur?" cur":"")+(next?" next":"");
+    const name=i===0?"Startuitrusting":(got||next||last?GEAR[i]:"???");
+    const sub=got?(cur?"Hier ben je nu":"Behaald"):(next?"Nog "+(LV_XP[i]-S.xp)+" XP":(last?"Eindvorm · bij "+LV_XP[i]+" XP":"Bij "+LV_XP[i]+" XP"));
+    li.innerHTML='<div class="sfig">'+heroSVG(i,0)+'</div><div class="stxt"><span class="slv">Level '+(i+1)+' · '+TITLES[i]+'</span><b>'+name+'</b><small>'+sub+'</small></div>';
+    ol.appendChild(li);
+  }
+}
+
+/* ---- Vandaag ---- */
+function weekDone(id){
+  const now=nowD();now.setHours(12,0,0,0);const mon=new Date(now);mon.setDate(now.getDate()-((now.getDay()+6)%7));
+  for(let d=new Date(mon);d<=now;d.setDate(d.getDate()+1)){const k=fmt(d);if((S.days[k]||[]).includes(id))return k}
+  return null;
+}
+function isDone(h){return h.freq==="week"?weekDone(h.id)!==null:(S.days[today()]||[]).includes(h.id)}
+const TGT='<svg class="ai" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4"/></svg>';
+const BIN='<svg class="ai" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M10 7V5h4v2M7 7l1 12h8l1-12M10.5 10.5v6M13.5 10.5v6"/></svg>';
+const FOCUS_ILL='<svg class="ill" viewBox="0 0 64 64" aria-hidden="true"><g class="o"><circle class="fk" cx="28" cy="36" r="21"/><circle class="fc" cx="28" cy="36" r="14.5"/><circle class="fk" cx="28" cy="36" r="8"/><circle class="fc" cx="28" cy="36" r="2.8"/>'+
+  '<path class="fn" d="M28.5 35.5L53 11"/><path class="fy" d="M53 11l1.5-8 6.5 6.5-8 1.5zM49.5 14.5l-7-1 5-5zM49.5 14.5l1 7 5-5z"/></g><path class="o fn" d="M12 12l3 3M8 22h4M20 6v4"/></svg>';
+let pendingDel=null;
+/* focus: hoogstens 3 taken; taken die vanzelf gaan vallen eruit, de lastigste vullen aan */
+function autoFocus(force){
+  // heb je zelf gekozen, dan blijft je keuze staan
+  if(S.focusManual&&!force)return S.habits.filter(h=>h.star);
+  S.habits.forEach(h=>{if(h.star&&h.lv===0)h.star=false});
+  let n=S.habits.filter(h=>h.star).length;
+  const cand=S.habits.filter(h=>!h.star&&typeof h.lv==="number"&&h.lv>=1).sort((x,y)=>y.lv-x.lv||((x.freq==="week")-(y.freq==="week")));
+  for(const h of cand){if(n>=MAX_FOCUS)break;h.star=true;n++}
+  return S.habits.filter(h=>h.star);
+}
+function toggleStar(h){
+  if(!h.star&&S.habits.filter(x=>x.star).length>=MAX_FOCUS){pop("Je hebt al "+MAX_FOCUS+" focustaken. Haal er eerst één weg.");return}
+  h.star=!h.star;S.focusManual=true;save();renderHabits();
+  pop(h.star?"Focus op: "+h.t:"Geen focus meer op: "+h.t);
+}
+function delTask(h){
+  if(pendingDel!==h.id){pendingDel=h.id;renderHabits();setTimeout(()=>{if(pendingDel===h.id){pendingDel=null;renderHabits()}},3500);return}
+  pendingDel=null;S.habits=S.habits.filter(x=>x.id!==h.id);save();renderHabits();renderStats();pop("Taak verwijderd: "+h.t);
+}
+function habitRow(h,cnt){
+  const li=document.createElement("li");li.className="row"+(h.star?" frow":"");
+  const b=document.createElement("button");b.type="button";
+  const dn=isDone(h),xp=h.xp+(h.star?FOCUS_BONUS:0);
+  b.className="habit"+(dn?" done":"");b.setAttribute("aria-pressed",dn);
+  b.innerHTML='<span class="box"></span><span class="t"></span><span class="xp">+'+xp+'<small title="Zo vaak afgevinkt">'+(cnt[h.id]||0)+'×</small></span>';
+  const t=b.querySelector(".t");t.textContent=h.t;
+  if(h.freq==="week"){const w=document.createElement("span");w.className="chip wk";w.textContent="Wekelijks";t.appendChild(w)}
+  if(h.focus){const c=document.createElement("span");c.className="chip"+(h.focus==="lastig"?" lastig":"");
+    const lv=(h.lv!=null)?h.lv:(h.focus==="lastig"?1:2);c.innerHTML=faceSVG(lv)+SHORT[lv];t.appendChild(c)}
+  if(isCustom(h)){const e=document.createElement("span");e.className="chip own";e.textContent="Eigen taak";t.appendChild(e)}
+  let tip=h.tip||(isCustom(h)?"":h.s);
+  if(h.freq==="week"&&dn){const wd=weekDone(h.id);if(wd!==today()){const [y,m,d]=wd.split("-").map(Number);tip="Deze week al gedaan op "+new Date(y,m-1,d).toLocaleDateString("nl-NL",{weekday:"long"})+". Tik om het ongedaan te maken."}}
+  if(tip){const sm=document.createElement("small");sm.textContent=tip;t.appendChild(sm)}
+  b.onclick=()=>toggle(h);
+  const acts=document.createElement("div");acts.className="acts";
+  const st=document.createElement("button");st.type="button";st.className="ab star";st.setAttribute("aria-pressed",!!h.star);
+  st.setAttribute("aria-label",(h.star?"Focus uitzetten voor ":"Focus aanzetten voor ")+h.t);st.title=h.star?"Focus uitzetten":"Focus aanzetten";
+  st.innerHTML=TGT;st.onclick=()=>toggleStar(h);acts.appendChild(st);
+  if(isCustom(h)){const del=document.createElement("button");del.type="button";del.className="ab del"+(pendingDel===h.id?" confirm":"");
+    del.setAttribute("aria-label","Verwijder "+h.t);del.title="Verwijderen";del.innerHTML=pendingDel===h.id?"Weg?":BIN;del.onclick=()=>delTask(h);acts.appendChild(del)}
+  li.appendChild(b);li.appendChild(acts);return li;
+}
+function renderHabits(){
+  const k=today();const done=S.days[k]||[];
+  const cnt={};Object.values(S.days).forEach(a=>a.forEach(id=>{cnt[id]=(cnt[id]||0)+1}));
+  const ul=$("habits");ul.innerHTML="";
+  const stars=S.habits.filter(h=>h.star);
+  if(S.habits.length){
+    const fl=document.createElement("li");fl.className="grp fgrp";
+    fl.innerHTML='<span class="gt">'+FOCUS_ILL+'<span>Focus<small>'+(stars.length?'Hier oefen je nu extra op · +'+FOCUS_BONUS+' XP per keer':'Kies hoogstens '+MAX_FOCUS+' taken om extra op te oefenen')+'</small></span></span><span class="gc">'+(stars.length?stars.filter(isDone).length+'/'+stars.length:'')+'</span><button type="button" class="fpick" id="fpick">Kiezen</button>';
+    ul.appendChild(fl);$("fpick").onclick=()=>openMenu("focus");
+    stars.forEach(h=>ul.appendChild(habitRow(h,cnt)));
+  }
+  CATS.forEach(C=>{
+    const hs=S.habits.filter(h=>!h.star&&catOf(h)===C.id).sort((a,b)=>(a.freq==="week")-(b.freq==="week"));if(!hs.length)return;
+    const gl=document.createElement("li");gl.className="grp";
+    gl.innerHTML='<span class="gt">'+ILL[C.id]+'<span>'+C.t+'<small>'+C.s+'</small></span></span><span class="gc">'+hs.filter(isDone).length+'/'+hs.length+'</span>';ul.appendChild(gl);
+    hs.forEach(h=>ul.appendChild(habitRow(h,cnt)));
+  });
+  const n=done.length;
+  $("daynote").innerHTML=n>=3?"<b>"+n+" van "+S.habits.length+"</b> gedaan. Je reeks is veilig voor vandaag.":"<b>"+n+" van 3</b> gedaan om je reeks vast te houden.";
+}
+function toggle(h){
+  let k=today();
+  if(h.freq==="week"){const wd=weekDone(h.id);if(wd)k=wd}
+  const arr=S.days[k]=S.days[k]||[];
+  const i=arr.indexOf(h.id);
+  S.given=S.given||{};const gk=k+"|"+h.id;
+  if(i>=0){arr.splice(i,1);sfx("uncheck");addXP(-(S.given[gk]??h.xp));delete S.given[gk]}
+  else{arr.push(h.id);sfx("check");const x=h.xp+(h.star?FOCUS_BONUS:0);S.given[gk]=x;addXP(x,(h.star?"focus · ":"")+h.t)}
+  for(const g in S.given)if(g.slice(0,10)<addDays(today(),-14))delete S.given[g];
+  save();renderHabits();renderStats();
+}
+/* eigen taak: eerst een naam, dan aangeven hoe het nu gaat */
+let pendingAdd=null;
+function renderAddRate(){
+  const box=$("addrate");
+  if(!pendingAdd){box.hidden=true;box.innerHTML="";return}
+  box.hidden=false;
+  box.innerHTML='<p class="arq">Hoe gaat <b></b> nu?</p><div class="ladder" id="addladder"></div><button class="linkbtn" type="button" id="addcancel">Annuleren</button>';
+  box.querySelector(".arq b").textContent="“"+pendingAdd.t+"”";
+  LEVELS.forEach((Lv,i)=>{const b=document.createElement("button");b.type="button";b.className="rung r"+i;
+    b.innerHTML=faceSVG(i)+'<span class="rt">'+Lv.t+'<small>'+Lv.s+'</small></span>';b.onclick=()=>addCustom(i);$("addladder").appendChild(b)});
+  $("addcancel").onclick=()=>{pendingAdd=null;renderAddRate();$("newhabit").focus()};
+  try{box.scrollIntoView({block:"nearest",behavior:"smooth"})}catch(e){}
+}
+function addCustom(lv){
+  const p=pendingAdd;if(!p)return;const focus=LEVELS[lv].focus;
+  const h={id:"c"+Date.now(),cat:p.cat,t:p.t,s:"Eigen taak",xp:10+(focus?5:0),lv:lv,focus:focus,tip:focus?(focus==="lastig"?GEN_TIP.l:GEN_TIP.v):null};
+  S.habits.push(h);pendingAdd=null;$("newhabit").value="";save();renderAddRate();renderHabits();sfx("check");pop("Taak toegevoegd: "+h.t);
+}
+$("addform").addEventListener("submit",e=>{
+  e.preventDefault();const v=$("newhabit").value.trim();if(!v){$("newhabit").focus();return}
+  pendingAdd={t:v,cat:$("newcat").value};renderAddRate();
+});
+
+
+/* ---- Waar hoort het? ---- */
+const ZONES=[
+  {id:"was",n:"Wasmand",e:"🧺"},
+  {id:"kleding",n:"Kledingkast",e:"👚"},
+  {id:"keuken",n:"Keukenkast",e:"🍽️"},
+  {id:"koel",n:"Koelkast",e:"🧊"},
+  {id:"gft",n:"GFT-bak",e:"🥬"},
+  {id:"papier",n:"Oud papier",e:"📰"},
+  {id:"glas",n:"Glasbak",e:"🍾"},
+  {id:"rest",n:"Restafval",e:"🗑️"},
+  {id:"kast",n:"Boekenkast",e:"📚"},
+  {id:"bad",n:"Badkamer",e:"🛁"},
+  {id:"gang",n:"Gang",e:"🚪"},
+  {id:"bureau",n:"Bureau",e:"💻"},
+  {id:"speel",n:"Speelgoedkist",e:"🪁"}
+];
+const ITEMS=[
+  ["Vieze sok","🧦","was"],["Gedragen T-shirt","👕","was"],["Spijkerbroek","👖","was"],["Natte handdoek","🧻","was"],
+  ["Schone sjaal","🧣","kleding"],["Pet","🧢","kleding"],["Schoon overhemd","👔","kleding"],["Jurk","👗","kleding"],
+  ["Mok","☕","keuken"],["Bord","🍽️","keuken"],["Vork","🍴","keuken"],["Pan","🍳","keuken"],["Glas","🥃","keuken"],
+  ["Melk","🥛","koel"],["Kaas","🧀","koel"],["Boter","🧈","koel"],["Eieren","🥚","koel"],
+  ["Bananenschil","🍌","gft"],["Klokhuis","🍎","gft"],["Aardappelschillen","🥔","gft"],["Verwelkte bloemen","🥀","gft"],
+  ["Oude krant","📰","papier"],["Lege doos","📦","papier"],["Envelop","✉️","papier"],
+  ["Lege pot","🫙","glas"],["Lege wijnfles","🍷","glas"],
+  ["Snoeppapiertje","🍬","rest"],["Kapotte ballon","🎈","rest"],["Kauwgom","🫧","rest"],
+  ["Boek","📕","kast"],["Spelletje","🎲","kast"],["Puzzel","🧩","kast"],
+  ["Tandenborstel","🪥","bad"],["Shampoo","🧴","bad"],["Zeep","🧼","bad"],
+  ["Schoenen","👟","gang"],["Sleutels","🔑","gang"],["Paraplu","☂️","gang"],["Jas","🧥","gang"],["Tas","🎒","gang"],
+  ["Pen","🖊️","bureau"],["Oplader","🔌","bureau"],["Schaar","✂️","bureau"],["Notitieboek","📓","bureau"],
+  ["Knuffelbeer","🧸","speel"],["Bal","⚽","speel"],["Speelgoedauto","🚗","speel"],["Blokken","🧱","speel"]
+];
+const TIPS={
+  was:"Gedragen kleding gaat meteen in de wasmand, niet op de stoel.",
+  kleding:"Schone kleding gaat terug in de kast. Alleen vies goed hoort in de wasmand.",
+  keuken:"Schone vaat hoort in de keukenkast. Vuile vaat direct in de vaatwasser.",
+  koel:"Verse spullen zoals zuivel en eieren gaan meteen terug in de koelkast.",
+  gft:"Groente-, fruit- en tuinafval gaat in de GFT-bak.",
+  papier:"Papier en karton gaan bij het oud papier. Dozen eerst plat maken.",
+  glas:"Lege potten en flessen gaan naar de glasbak. Deksels mogen bij het plastic of restafval.",
+  rest:"Wat niet gescheiden kan worden, gaat bij het restafval.",
+  kast:"Boeken en spellen terug op de plank na gebruik.",
+  bad:"Verzorgingsspullen horen in de badkamer.",
+  gang:"Sleutels, schoenen, jassen en tassen bij de voordeur: dan zoek je ze nooit meer.",
+  bureau:"Pennen, opladers en schrijfspullen hebben een vaste plek op of in je bureau.",
+  speel:"Speelgoed gaat terug in de speelgoedkist."
+};
+const LEVELSG={makkelijk:{z:4,t:60,n:"Makkelijk"},normaal:{z:6,t:45,n:"Normaal"},moeilijk:{z:9,t:45,n:"Moeilijk"}};
+let diff="normaal";
+try{const d=localStorage.getItem(KEY+"-diff");if(LEVELSG[d])diff=d}catch(e){}
+if("best" in S){if(!S.bestBy&&S.best>0)S.bestBy={normaal:S.best};delete S.best;save()}
+S.bestBy=S.bestBy||{};
+let G={on:false,sel:null,left:[],score:0,time:45,tm:null,zones:[]};
+function showBest(){$("gbest").textContent=S.bestBy[diff]||0}
+function pickZones(){return shuffle(ZONES.slice()).slice(0,LEVELSG[diff].z)}
+function renderZones(){
+  const z=$("zones");z.innerHTML="";
+  G.zones.forEach(zn=>{
+    const b=document.createElement("button");b.className="zone";b.dataset.z=zn.id;
+    b.innerHTML='<span class="e" aria-hidden="true">'+zn.e+'</span>'+zn.n;
+    b.onclick=()=>drop(zn.id,b);z.appendChild(b);
+  });
+}
+function renderDiff(){
+  const box=$("gdiff");box.innerHTML="";
+  Object.keys(LEVELSG).forEach(k=>{
+    const b=document.createElement("button");b.type="button";b.setAttribute("aria-pressed",k===diff);
+    b.innerHTML=LEVELSG[k].n+'<small>'+LEVELSG[k].z+' plekken</small>';
+    b.onclick=()=>{if(G.on)return;diff=k;try{localStorage.setItem(KEY+"-diff",k)}catch(e){}
+      renderDiff();showBest();$("gtime").textContent=LEVELSG[diff].t;G.zones=pickZones();renderZones()};
+    box.appendChild(b);
+  });
+}
+function renderFloor(){
+  const f=$("floor");f.innerHTML="";
+  if(!G.on){return}
+  if(!G.left.length){f.innerHTML='<p class="hint">Vloer leeg!</p>';return}
+  G.left.forEach((it,i)=>{
+    const b=document.createElement("button");b.className="item";b.setAttribute("aria-pressed",G.sel===i);
+    b.innerHTML='<span class="e" aria-hidden="true">'+it[1]+'</span>'+it[0];
+    b.onclick=()=>{G.sel=(G.sel===i?null:i);renderFloor()};
+    f.appendChild(b);
+  });
+}
+function msg(t,c){const m=$("gmsg");m.textContent=t;m.className="toastline "+(c||"")}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function refill(){
+  const ids=G.zones.map(z=>z.id), onFloor=G.left.map(x=>x[0]);
+  const pool=shuffle(ITEMS.filter(it=>ids.includes(it[2])&&!onFloor.includes(it[0])));
+  G.left=G.left.concat(pool.slice(0,Math.max(0,10-G.left.length)));
+}
+function startGame(){
+  clearInterval(G.tm);const T=SPD>1?10:LEVELSG[diff].t;
+  G={on:true,sel:null,left:[],score:0,time:T,tm:null,zones:pickZones()};renderZones();refill();
+  $("gscore").textContent=0;$("gtime").textContent=T;$("gstart").textContent="Opnieuw";msg("Kies een voorwerp.");renderFloor();
+  $("gdiff").classList.add("locked");
+  const end=Date.now()+T*1000;
+  G.tm=setInterval(()=>{G.time=Math.max(0,Math.ceil((end-Date.now())/1000));$("gtime").textContent=G.time;if(G.time<=0)stopGame()},250);
+}
+function stopGame(){
+  clearInterval(G.tm);G.on=false;renderFloor();$("gdiff").classList.remove("locked");
+  const s=G.score;let t="Tijd om! "+s+" goed opgeruimd.";
+  if(s>(S.bestBy[diff]||0)){S.bestBy[diff]=s;showBest();t+=" Nieuw record voor "+LEVELSG[diff].n.toLowerCase()+"!"}
+  $("floor").innerHTML='<p class="hint">'+t+'<br>Druk op <b>Opnieuw</b> voor een ronde met andere plekken.</p>';
+  const mult=diff==="moeilijk"?3:2;
+  if(s>0)bonusXP(s*mult,"sorteerronde");save();msg("");
+}
+function drop(z,el){
+  if(!G.on){msg("Start eerst een ronde.");return}
+  if(G.sel===null){msg("Kies eerst een voorwerp op de vloer.");return}
+  const it=G.left[G.sel];
+  if(it[2]===z){
+    G.left.splice(G.sel,1);G.sel=null;G.score++;$("gscore").textContent=G.score;
+    el.classList.remove("ok");void el.offsetWidth;el.classList.add("ok");sfx("good");msg(it[0]+" ligt op zijn plek.","good");
+    if(G.left.length<4)refill();
+  }else{
+    el.classList.remove("no");void el.offsetWidth;el.classList.add("no");sfx("bad");msg("Niet hier. "+TIPS[it[2]],"bad");
+  }
+  renderFloor();
+}
+$("gstart").onclick=startGame;
+G.zones=pickZones();renderDiff();showBest();$("gtime").textContent=LEVELSG[diff].t;
+
+/* ---- Reset-sprint ---- */
+const TASKS=["Leg 5 dingen terug op hun vaste plek.","Maak de salontafel helemaal leeg.","Ruim één la of plank op.","Breng alle vaat naar de keuken.","Gooi 5 dingen weg die je niet meer gebruikt.","Vouw de schone was op.","Maak de wastafel en spiegel schoon.","Leg alle schoenen netjes bij de deur.","Neem het aanrecht af.","Schud de kussens op en vouw de plaid.","Verzamel alle losse papieren op één stapel.","Zet een tas klaar voor spullen die weg mogen."];
+let P={min:5,end:0,tm:null,on:false};
+function fmtClock(s){return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")}
+function newTask(){let t;do{t=TASKS[Math.floor(Math.random()*TASKS.length)]}while(t===$("task").textContent&&TASKS.length>1);$("task").textContent=t}
+document.querySelectorAll("#choices button").forEach(b=>b.onclick=()=>{
+  if(P.on)return;P.min=+b.dataset.min;
+  document.querySelectorAll("#choices button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  $("clock").textContent=fmtClock(P.min*60);$("ringfill").style.width="0";
+});
+function tick(){
+  const left=Math.max(0,Math.ceil((P.end-Date.now())*SPD/1000));const total=P.min*60;
+  $("clock").textContent=fmtClock(left);$("ringfill").style.width=((total-left)/total*100)+"%";
+  if(left<=0)finishSprint(true);
+}
+function finishSprint(full){
+  if(full)sfx("done");
+  clearInterval(P.tm);const total=P.min*60;const left=Math.max(0,Math.ceil((P.end-Date.now())*SPD/1000));
+  const mins=full?P.min:Math.floor((total-left)/60);P.on=false;
+  $("sgo").hidden=false;$("sstop").hidden=true;
+  $("task").textContent=full?"Klaar! Kijk even rond: zie je het verschil?":"Gestopt na "+mins+" volle minuten.";
+  if(mins>0)bonusXP(mins*5,"reset-sprint");
+}
+$("sgo").onclick=()=>{sfx("start");P.on=true;P.end=Date.now()+P.min*60000/SPD;$("sgo").hidden=true;$("sstop").hidden=false;newTask();tick();P.tm=setInterval(tick,250)};
+$("sstop").onclick=()=>finishSprint(false);
+$("snext").onclick=newTask;
+
+/* ---- Vragenlijst (elke 14 dagen) ---- */
+const CHECK_DAYS=14;
+function addDays(k,n){const [y,m,d]=k.split("-").map(Number);const dt=new Date(y,m-1,d,12);dt.setDate(dt.getDate()+n);return fmt(dt)}
+function daysBetween(a,b){const p=k=>{const [y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d,12)};return Math.round((p(b)-p(a))/864e5)}
+function nlDate(k){const [y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString("nl-NL",{weekday:"long",day:"numeric",month:"long"})}
+/* oudere antwoorden omzetten naar één trede op de ladder */
+function toLv(x){
+  if(!x)return x;if(typeof x==="string")return {ok:{lv:0},vergeet:{lv:2},lastig:{lv:3},nvt:{nvt:true}}[x];
+  if(x.nvt||x.lv!==undefined)return x;
+  if(x.f===0)return {lv:4};if(x.f<=1)return {lv:x.d===0?3:2};if(x.d===0)return {lv:1};return {lv:0};
+}
+function convAll(a){const o={};Object.keys(a||{}).forEach(id=>{const v=toLv(a[id]);if(v)o[id]=v});return o}
+if(S.profile&&!S.history){
+  const a=convAll(S.profile);
+  S.history=Object.keys(a).length?[{date:today(),a:a}]:[];
+  S.profile=Object.keys(a).length?a:null;S.nextCheck=addDays(today(),CHECK_DAYS);save();
+}
+S.history=(S.history||[]).map(h=>({date:h.date,a:convAll(h.a)}));
+if(S.profile)S.profile=convAll(S.profile);
+const lastCheck=()=>S.history.length?S.history[S.history.length-1]:null;
+const isDue=()=>!S.nextCheck||today()>=S.nextCheck;
+function focusOf(x){if(!x||x.nvt)return null;return LEVELS[x.lv].focus}
+function taskScore(x){return LEVELS[x.lv].pts}
+function score(a){const xs=allQ().map(c=>a[c.id]).filter(x=>x&&!x.nvt);if(!xs.length)return null;return Math.round(xs.reduce((s,x)=>s+taskScore(x),0)/xs.length)}
+
+let Q={i:0,a:{},x:[]};
+function showView(name){
+  const intake=name==="intake"||name==="held";
+  $("nav").hidden=intake;
+  ["held","intake","dag","sorteer","sprint","mindset","lit","pad"].forEach(n=>$("p-"+n).hidden=(n!==name));
+  document.querySelectorAll("nav button").forEach(x=>x.setAttribute("aria-selected",x.dataset.tab===name));
+  if(name==="dag")renderCheckNote();
+  if(name==="mindset")renderMindset();
+  if(name==="pad")renderPad();
+  window.scrollTo(0,0);
+}
+function startIntake(){
+  Q={i:0,a:{},x:(S.extras||[]).slice()};
+  const prev=lastCheck();
+  $("intakelead").textContent=prev
+    ?"Tijd voor je tweewekelijkse check. Kies per klusje de zin die nu het best past; daarna zie je wat er sinds "+nlDate(prev.date)+" is veranderd."
+    :"Kies per klusje de zin die het best bij je past. Daarmee zet de app missies klaar voor wat je nog lastig vindt. Over twee weken vraagt de app het opnieuw, zo zie je je vooruitgang.";
+  $("intakelead").hidden=false;showView("intake");renderQ();
+}
+function chosenX(){return EXTRAS.filter(e=>Q.x.includes(e.id))}
+function customQ(){return (S.habits||[]).filter(isCustom).map(h=>({id:h.id,cat:catOf(h),freq:h.freq,t:h.t,s:"Eigen taak",xp:10,v:GEN_TIP.v,l:GEN_TIP.l,custom:true}))}
+function restQ(){return chosenX().concat(customQ())}
+function allQ(){return ALLQ.concat(customQ())}
+function renderQ(){
+  const c=$("qcard");const n=CATALOG.length,xs=restQ();
+  if(Q.i===n){renderExtras();return}
+  if(Q.i>n+xs.length){renderResult();return}
+  const isX=Q.i>n,item=isX?xs[Q.i-n-1]:CATALOG[Q.i];const cur=Q.a[item.id];
+  const prev=lastCheck()&&lastCheck().a[item.id];
+  c.innerHTML='<div class="qtop"><span>'+(isX?(item.custom?'Eigen taak':'Extra taak')+' · '+(Q.i-n)+' van '+xs.length:'Klusje '+(Q.i+1)+' van '+n)+'</span><span>'+
+    (Q.i>0?'<button id="qback">Vorige</button>':'')+'<button id="qskip">Later</button></span></div>'+
+    '<div class="qbar"><i style="width:'+(isX?(Q.i-n-1)/xs.length*100:Q.i/n*100)+'%"></i></div>'+
+    '<h2 class="qtitle"></h2><p class="qsub"></p><p class="qask">Welke zin past het best?</p><div class="ladder" id="ladder"></div>'+
+    '<button class="linkbtn" id="qnvt" type="button">'+(item.custom?'Deze eigen taak verwijderen':'Niet meenemen als taak')+'</button>';
+  c.querySelector(".qtitle").textContent=item.t;c.querySelector(".qsub").textContent=item.s;
+  const C=CATS.find(x=>x.id===item.cat);c.querySelector(".qtitle").insertAdjacentHTML("beforebegin",'<p class="qcat">'+ILL[C.id]+C.t+'</p>');
+  const box=$("ladder");
+  LEVELS.forEach((L,i)=>{
+    const b=document.createElement("button");b.type="button";b.className="rung r"+i;
+    b.setAttribute("aria-pressed",!!(cur&&!cur.nvt&&cur.lv===i));
+    const was=prev&&!prev.nvt&&prev.lv===i;
+    b.innerHTML=faceSVG(i)+'<span class="rt">'+L.t+'<small>'+L.s+'</small></span>'+(was?'<span class="was">vorige keer</span>':'');
+    b.onclick=()=>{Q.a[item.id]={lv:i};b.setAttribute("aria-pressed","true");setTimeout(()=>{Q.i++;renderQ()},160)};
+    box.appendChild(b);
+  });
+  $("qnvt").onclick=()=>{Q.a[item.id]={nvt:true};Q.i++;renderQ()};
+  if($("qback"))$("qback").onclick=()=>{Q.i--;renderQ()};
+  $("qskip").onclick=()=>{S.nextCheck=addDays(today(),1);save();showView("dag")};
+}
+function renderExtras(){
+  const c=$("qcard");const n=CATALOG.length;
+  let h='<div class="qtop"><span>Extra taken</span><span><button id="qback">Vorige</button><button id="qskip">Later</button></span></div><div class="qbar"><i style="width:100%"></i></div>'+
+    '<p class="qcat">Optioneel</p><h2 class="qtitle">Wil je er nog iets bij?</h2><p class="qsub">Kies taken die bij jouw huis passen. Daarna vul je ook voor elke gekozen taak in hoe het gaat. Niets kiezen mag ook.</p>';
+  CATS.forEach(C=>{
+    h+='<div class="xgrp"><p class="xgh">'+ILL[C.id]+C.t+'</p><div class="xlist">';
+    EXTRAS.filter(e=>e.cat===C.id).forEach(e=>{
+      h+='<button type="button" class="xopt" data-id="'+e.id+'" aria-pressed="'+Q.x.includes(e.id)+'"><span class="xbox" aria-hidden="true"></span><span class="xt">'+e.t+'<small>'+(e.freq==="week"?"Wekelijks · ":"Dagelijks · ")+e.s+'</small></span></button>';
+    });
+    h+='</div></div>';
+  });
+  h+='<div class="qnext"><span class="qask" id="xcount"></span><button class="btn" id="xgo" type="button">Verder</button></div>';
+  c.innerHTML=h;
+  const upd=()=>{$("xcount").textContent=Q.x.length?Q.x.length+" gekozen":"Niets gekozen";$("xgo").textContent=Q.x.length?"Verder":"Verder zonder extra's"};upd();
+  c.querySelectorAll(".xopt").forEach(b=>b.onclick=()=>{const id=b.dataset.id,i=Q.x.indexOf(id);if(i>=0)Q.x.splice(i,1);else Q.x.push(id);b.setAttribute("aria-pressed",i<0);upd()});
+  $("xgo").onclick=()=>{EXTRAS.forEach(e=>{if(!Q.x.includes(e.id))delete Q.a[e.id]});Q.i=n+1;renderQ()};
+  $("qback").onclick=()=>{Q.i=n-1;renderQ()};
+  $("qskip").onclick=()=>{S.nextCheck=addDays(today(),1);save();showView("dag")};
+}
+function renderResult(){
+  $("intakelead").hidden=true;
+  const a=Q.a, prev=lastCheck();
+  const now=score(a), before=prev?score(prev.a):null;
+  const foc=k=>allQ().filter(c=>focusOf(a[c.id])===k);
+  const l=foc("lastig"), w=foc("vergeet");
+  let up=[],down=[];
+  if(prev)allQ().forEach(c=>{const x=a[c.id],y=prev.a[c.id];if(!x||!y||x.nvt||y.nvt)return;
+    if(x.lv<y.lv)up.push(c);else if(x.lv>y.lv)down.push(c)});
+  const c=$("qcard");
+  let h='<div class="qtop"><span>Jouw uitslag</span><span><button id="qback">Vorige</button></span></div><div class="qbar"><i style="width:100%"></i></div>';
+  h+='<div class="score"><div><span class="big">'+(now===null?"–":now+"%")+'</span><span class="lbl">Huishoudscore</span></div>';
+  if(before!==null&&now!==null){const d=now-before;h+='<div class="delta '+(d>0?"up":d<0?"down":"")+'">'+(d>0?"+":"")+d+'<span class="lbl">sinds '+nlDate(prev.date)+' ('+before+'%)</span></div>'}
+  h+='</div><p class="qsub" style="margin:0">100% betekent dat al je klusjes vanzelf gaan.</p><div class="cats">';
+  CATS.forEach(C=>{
+    const sub=o=>{const r={};allQ().filter(x=>x.cat===C.id).forEach(x=>{if(o[x.id])r[x.id]=o[x.id]});return r};
+    const n=score(sub(a));if(n===null)return;const b=prev?score(sub(prev.a)):null;
+    const d=b===null?"":'<span class="cd '+(n>b?"up":n<b?"down":"")+'">'+(n>b?"+":"")+(n-b)+'</span>';
+    h+='<div class="cat"><div class="ch"><b>'+ILL[C.id]+C.t+'</b><span>'+n+'%'+d+'</span></div><div class="cbar"><i style="width:'+n+'%"></i></div></div>';
+  });
+  h+='</div><div class="res">';
+  const li=(arr,cls,key)=>arr.map(x=>'<li class="'+cls+'"><b>'+x.t+'</b><span>'+x[key]+'</span></li>').join("");
+  if(up.length)h+='<h3>Vooruitgegaan · '+up.length+'</h3><p class="qask">'+up.map(x=>x.t).join(", ")+'</p>';
+  if(down.length)h+='<h3>Teruggezakt · '+down.length+'</h3><p class="qask">'+down.map(x=>x.t).join(", ")+'</p>';
+  if(l.length)h+='<h3>Kost moeite · '+l.length+'</h3><ul>'+li(l,"lastig","l")+'</ul>';
+  if(w.length)h+='<h3>Schiet erbij in · '+w.length+'</h3><ul>'+li(w,"","v")+'</ul>';
+  if(!l.length&&!w.length)h+='<p class="qask">Alles gaat vanzelf. Mooi werk.</p>';
+  const xin=chosenX().filter(e=>a[e.id]&&!a[e.id].nvt);if(xin.length)h+='<h3>Extra taken · '+xin.length+'</h3><p class="qask">'+xin.map(e=>e.t).join(", ")+'</p>';
+  h+='</div><p class="qask"><b>Focus:</b> '+(S.focusManual?'je eigen keuze van focustaken blijft staan. Je kunt hem altijd aanpassen met Kiezen bij Focus.':'de app zet de klusjes die nu de meeste moeite kosten bovenaan als focustaak (hoogstens '+MAX_FOCUS+'). Je kunt ze zelf kiezen met Kiezen bij Focus.')+'</p>';
+  h+='<p class="qask">Volgende check: '+nlDate(addDays(today(),CHECK_DAYS))+'.</p><button class="btn" id="qapply">Opslaan en missies klaarzetten</button>';
+  c.innerHTML=h;
+  $("qback").onclick=()=>{Q.i=CATALOG.length+restQ().length;$("intakelead").hidden=false;renderQ()};
+
+}
+/* de knop werkt via de pagina zelf, zodat hij ook na een update van het spel blijft reageren */
+document.addEventListener("click",e=>{
+  if(!e.target.closest("#qapply"))return;
+  if(!Object.keys(Q.a).length){pop("Je antwoorden zijn verlopen. Vul de vragen nog even opnieuw in.");startIntake();return}
+  applyProfile();
+});
+function safe(f){try{f();return null}catch(e){console.error(e);return e}}
+function applyProfile(){
+  safe(()=>sfx("done"));
+  const a=Q.a,errs=[];
+  // 1. eerst de antwoorden en missies vastleggen, zo eenvoudig mogelijk
+  let earn=true;
+  errs.push(safe(()=>{const pc=lastCheck();earn=!pc||!pc.date||daysBetween(pc.date,today())>=7}));
+  S.history=(Array.isArray(S.history)?S.history:[]).filter(x=>x&&x.date!==today());
+  S.history.push({date:today(),a:a});S.profile=a;S.nextCheck=addDays(today(),CHECK_DAYS);
+  const lvOf=x=>(x&&typeof x.lv==="number"&&LEVELS[x.lv])?x.lv:0;
+  const picked=CATALOG.concat(chosenX()).filter(c=>a[c.id]&&!a[c.id].nvt)
+    .map(c=>{const lv=lvOf(a[c.id]),focus=LEVELS[lv].focus;
+      return {id:c.id,cat:c.cat,freq:c.freq,t:c.t,s:c.s,xp:c.xp+(focus?5:0),focus:focus,tip:focus?(focus==="lastig"?c.l:c.v):null,lv:lv}})
+    .sort((x,y)=>y.lv-x.lv);
+  const old=Array.isArray(S.habits)?S.habits:[];
+  const prevStars=new Set(old.filter(h=>h&&h.star).map(h=>h.id));
+  const custom=old.filter(isCustom).filter(h=>!(a[h.id]&&a[h.id].nvt)).map(h=>{
+    const x=a[h.id];if(!x)return h;const lv=lvOf(x),focus=LEVELS[lv].focus;
+    return Object.assign({},h,{lv:lv,focus:focus,xp:10+(focus?5:0),tip:focus?(focus==="lastig"?GEN_TIP.l:GEN_TIP.v):null});
+  });
+  S.extras=(Q.x||[]).filter(id=>a[id]&&!a[id].nvt);
+  S.habits=(picked.length?picked:DEFAULTS.slice()).concat(custom);
+  S.habits.forEach(h=>{if(prevStars.has(h.id))h.star=true});
+  const foc=autoFocus();S.focusInit=true;
+  save();
+  // 2. dan pas het scherm bijwerken; als daar iets misgaat, is alles al opgeslagen
+  errs.push(safe(renderHabits));
+  errs.push(safe(()=>showView("dag")));
+  if(earn)errs.push(safe(()=>addXP(20,"voortgangscheck")));
+  if(foc.length)setTimeout(()=>pop("Focus: "+foc.map(h=>h.t).join(", ")),earn?1900:200);
+  const err=errs.find(Boolean);
+  if(err){$("p-dag").hidden=false;$("p-intake").hidden=true;$("nav").hidden=false;
+    pop("Opgeslagen, maar het scherm gaf een fout: "+String(err.message||err).slice(0,80))}
+}
+function renderCheckNote(){
+  const el=$("checknote");if(!el)return;
+  const due=isDue();
+  el.innerHTML=due
+    ?'<span><b>Je voortgangscheck staat klaar.</b> Kijk hoe je ervoor staat ten opzichte van de vorige keer.</span>'
+    :'<span>Volgende voortgangscheck: <b>'+nlDate(S.nextCheck)+'</b> (over '+daysBetween(today(),S.nextCheck)+' dagen).</span>';
+  el.className="checknote"+(due?" due":"");
+  $("redo").textContent=due?"Check invullen":"Nu al invullen";
+}
+$("redo").onclick=startIntake;
+$("padback").onclick=()=>showView("dag");
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("lvup").hidden)$("lvup").hidden=true});
+
+/* ---- Mindset ---- */
+const THOUGHTS=[
+ "Een opgeruimd huis is geen eindpunt. Het is iets wat je steeds even doet.",
+ "Vijf minuten is genoeg om verschil te zien.",
+ "Je hoeft niet gemotiveerd te zijn om te beginnen. Motivatie komt vaak pas tijdens het doen.",
+ "Elke keer dat je iets terugzet, help je jezelf van morgen.",
+ "Gisteren is voorbij. Vandaag begin je gewoon opnieuw.",
+ "Rommel zegt niets over wie je bent. Er liggen alleen spullen.",
+ "Half gedaan is meer dan niet gedaan.",
+ "Je huis hoeft niet op een foto uit een tijdschrift te lijken. Het moet voor jou werken.",
+ "Een klein gewoontje dat je volhoudt is meer waard dan één grote schoonmaak.",
+ "Moe? Doe dan het kleinste stapje: één ding wegleggen.",
+ "Je bent niet slecht in huishouden. Je bent aan het oefenen.",
+ "Vergelijk jezelf alleen met jou van twee weken geleden.",
+ "Rust nemen hoort erbij. Morgen pak je het weer op.",
+ "Elk vinkje is bewijs dat je het kunt."
+];
+const FLIPS=[
+ ["Het is zo'n bende, ik weet niet waar ik moet beginnen.","Ik kies één plek en maak alleen die leeg. Dat is genoeg voor nu."],
+ ["Ik heb er geen tijd voor.","Twee minuten heb ik wel. Daar begin ik mee."],
+ ["Het wordt toch zo weer rommelig.","Opruimen is onderhoud, net als tandenpoetsen. Dat het terugkomt is normaal."],
+ ["Anderen krijgen dit wel voor elkaar.","Ik zie alleen de voorkant van hun huis. Ik vergelijk me met mezelf."],
+ ["Ik heb het weer niet volgehouden.","Ik heb het eerder wel gedaan, dus ik kan opnieuw beginnen."]
+];
+const MINDS=[
+ ["Klaar is beter dan perfect","Een half opgemaakt bed telt. De wens om het perfect te doen is vaak de reden dat je niet begint."],
+ ["Begin belachelijk klein","Gewoontes groeien door herhaling, niet door wilskracht. Maak de stap zo klein dat nee zeggen raar voelt."],
+ ["Een gemiste dag is geen mislukking","Iedereen slaat weleens een dag over. Pak het de dag erna gewoon weer op; twee dagen achter elkaar overslaan is het enige om op te letten."],
+ ["Pas de omgeving aan, niet jezelf","Gaat iets steeds mis, dan ligt het vaak aan de plek of de route. Een haakje bij de deur helpt meer dan een goed voornemen."],
+ ["Doe het voor je toekomstige zelf","De afwas van vanavond is een cadeautje voor jou van morgenochtend."],
+ ["Vooruitgang zie je pas als je terugkijkt","Daarom doe je elke twee weken de check. Kleine stappen worden zo zichtbaar."]
+];
+let qi=null;
+function renderMindset(){
+  if(qi===null){const d=nowD();qi=(d.getFullYear()*372+d.getMonth()*31+d.getDate())%THOUGHTS.length}
+  $("mquote").textContent=THOUGHTS[qi];
+  const total=Object.values(S.days).reduce((n,a)=>n+a.length,0);
+  const h=S.history||[];let p='';
+  if(h.length>=2){const a=score(h[0].a),b=score(h[h.length-1].a);if(a!==null&&b!==null&&b>a)p='Je huishoudscore ging van <b>'+a+'%</b> naar <b>'+b+'%</b>. ';}
+  p+=total?'Je hebt al <b>'+total+'</b> '+(total===1?'missie':'missies')+' afgevinkt'+(streak()?' en je reeks staat op <b>'+streak()+'</b> '+(streak()===1?'dag':'dagen'):'')+'. Dat is bewijs, geen geluk.'
+           :'Je eerste vinkje is de belangrijkste. Kies vandaag één missie uit je lijst.';
+  $("proof").innerHTML='<span class="pl">Jouw bewijs</span><span>'+p+'</span>';
+  if(!$("flips").children.length){
+    FLIPS.forEach(f=>{const b=document.createElement("button");b.type="button";b.className="flip";b.setAttribute("aria-pressed","false");
+      b.innerHTML='<span class="neg"></span><span class="pos"></span>';b.querySelector(".neg").textContent=f[0];b.querySelector(".pos").textContent=f[1];
+      b.onclick=()=>b.setAttribute("aria-pressed",b.getAttribute("aria-pressed")!=="true");$("flips").appendChild(b)});
+    MINDS.forEach(m=>{const li=document.createElement("li");li.innerHTML='<b></b><span></span>';li.querySelector("b").textContent=m[0];li.querySelector("span").textContent=m[1];$("minds").appendChild(li)});
+  }
+}
+$("mnext").onclick=()=>{qi=(qi+1)%THOUGHTS.length;renderMindset()};
+
+/* ---- Held kiezen ---- */
+const HAIRS=[{id:"kort",n:"Kort"},{id:"lang",n:"Lang"},{id:"knot",n:"Knotje"},{id:"krul",n:"Krullen"}];
+const SKINS=[["#f6d2b0","Licht"],["#e3aa80","Getint"],["#b47852","Bruin"],["#7a4a2e","Donker"]];
+const HCOLS=[["#2a2522","Zwart"],["#7a4626","Bruin"],["#e2b24c","Blond"],["#c4512f","Rood"]];
+function look(){return S.look||{hair:"kort",skin:SKINS[0][0],hc:HCOLS[0][0]}}
+/* haar in held-coördinaten (hoofd op 40,30 r14); back = achter het hoofd, front = ervoor */
+function hairBack(st){
+  if(st==="lang")return '<path class="fh" d="M25 31q-3-18 15-18 18 0 15 18v13q-4 3-8 0v-7H33v7q-4 3-8 0z"/>';
+  if(st==="knot")return '<circle class="fh" cx="40" cy="13" r="5.5"/>';
+  return "";
+}
+function hairFront(st){
+  if(st==="krul")return '<path class="fh" d="M26 27q-3-5 1-8-1-5 5-6 2-4 8-3 6-1 8 3 6 1 5 6 4 3 1 8-3-4-8-3-2-3-6-2-4-1-6 2-5-1-8 3z"/>';
+  if(st==="lang")return '<path class="fh" d="M27 26q3-12 13-11 10-1 13 11-6-4-13-3.5-7-.5-13 3.5z"/>';
+  if(st==="knot")return '<path class="fh" d="M27 26q3-11 13-10 10-1 13 10-6-4-13-3.5-7-.5-13 3.5z"/>';
+  return '<path class="fh" d="M27 27q3-13 13-12 11-1 14 12-6-6-14-5-8-1-13 5z"/>';
+}
+function headSVG(st){
+  return '<svg class="ill" viewBox="0 0 48 48" aria-hidden="true"><g class="o" transform="translate(-16,-3)">'+hairBack(st)+'<circle class="fs" cx="40" cy="30" r="14"/>'+hairFront(st)+'</g>'+
+    '<circle class="fi" cx="19" cy="27" r="1.7"/><circle class="fi" cx="29" cy="27" r="1.7"/><path class="o fn" d="M20 33q4 4 8 0"/></svg>';
+}
+function applyLook(el,L){L=L||look();(el||document.documentElement).style.setProperty("--skin",L.skin);(el||document.documentElement).style.setProperty("--hair",L.hc)}
+function heroName(){return S.name||"Je held"}
+let MK=null,MKfromMenu=false;
+function openMaker(fromMenu){
+  MKfromMenu=fromMenu;MK=Object.assign({},look());$("mkname").value=S.name||"";
+  $("mkback").hidden=!fromMenu;
+  showView("held");renderMaker();
+}
+function swatches(box,list,key){
+  box.innerHTML="";
+  list.forEach(([c,n])=>{const b=document.createElement("button");b.type="button";b.className="swc";b.style.background=c;b.setAttribute("aria-label",n);b.title=n;
+    b.setAttribute("aria-pressed",MK[key]===c);b.onclick=()=>{MK[key]=c;renderMaker()};box.appendChild(b)});
+}
+function renderMaker(){
+  applyLook($("p-held"),MK);
+  $("mkfig").innerHTML=heroSVG(Math.min(lvInfo(S.xp).gear,7),0,MK.hair);
+  const hb=$("mkhair");hb.innerHTML="";
+  HAIRS.forEach(h=>{const b=document.createElement("button");b.type="button";b.className="swh";b.setAttribute("aria-pressed",MK.hair===h.id);
+    b.innerHTML=headSVG(h.id)+'<span>'+h.n+'</span>';b.onclick=()=>{MK.hair=h.id;renderMaker()};hb.appendChild(b)});
+  swatches($("mkhc"),HCOLS,"hc");swatches($("mkskin"),SKINS,"skin");
+}
+$("mkrand").onclick=()=>{const r=a=>a[Math.floor(Math.random()*a.length)];MK={hair:r(HAIRS).id,skin:r(SKINS)[0],hc:r(HCOLS)[0]};renderMaker()};
+$("mkok").onclick=()=>{
+  S.look=MK;S.name=$("mkname").value.trim().slice(0,16);save();applyLook();renderStats();
+  if(!MKfromMenu&&(!S.history.length||isDue()))startIntake();else showView("dag");
+  pop(heroName()+" staat klaar");
+};
+$("mkback").onclick=()=>showView("dag");
+
+/* ---- Menu: opslaan, laden, opnieuw beginnen ---- */
+const SAVE_VER=2;
+function encodeSave(){return "HH1:"+btoa(unescape(encodeURIComponent(JSON.stringify(Object.assign({},S,{saveVer:SAVE_VER})))))}
+/* leest back-upcodes van elke versie van het spel, ook als er spaties, enters of andere tekst omheen staan */
+function decodeSave(text){
+  text=String(text||"");let o=null;
+  const m=text.match(/HH1:\s*([A-Za-z0-9+/=_\-\s]+)/);
+  if(m){const parts=m[1].trim().split(/\s+/);
+    for(let n=parts.length;n>0&&!o;n--){
+      let b=parts.slice(0,n).join("").replace(/-/g,"+").replace(/_/g,"/");while(b.length%4)b+="=";
+      try{o=JSON.parse(decodeURIComponent(escape(atob(b))))}catch(e){}
+    }}
+  else{const j=text.slice(text.indexOf("{"),text.lastIndexOf("}")+1);if(j)o=JSON.parse(j)}
+  if(!o||typeof o!=="object"||Array.isArray(o))throw 0;
+  if(!("xp" in o)&&!("habits" in o)&&!("days" in o))throw 0;
+  return o;
+}
+function loadSave(o){
+  const data=Object.assign({},o);delete data.saveVer;
+  // via opslaan + herladen gaan alle omzettingen voor oude versies vanzelf mee
+  try{
+    localStorage.setItem(KEY,JSON.stringify(data));
+    if(localStorage.getItem(KEY)===JSON.stringify(data)){try{sessionStorage.setItem(KEY+"-loaded","1")}catch(e){}location.reload();return}
+  }catch(e){}
+  S=Object.assign({xp:0,habits:DEFAULTS.slice(),days:{},bestBy:{},history:[]},data);S.history=S.history||[];S.bestBy=S.bestBy||{};S.snd=Object.assign({sfx:true},S.snd||{});
+  restart();closeMenu();pop("Voortgang geladen. Welkom terug, "+heroName()+"!");
+}
+function openMenu(view){
+  const m=$("menu");m.hidden=false;
+  const body=$("menubody");
+  if(!view){
+    body.innerHTML='<h2>Menu</h2><div class="mlist">'+
+      '<button type="button" data-a="held"><b>Held aanpassen</b><small>Ander kapsel, andere kleuren of een nieuwe naam</small></button>'+
+      '<button type="button" data-a="save"><b>Voortgang opslaan</b><small>Maak een code waarmee je later verder kunt</small></button>'+
+      '<button type="button" data-a="load"><b>Voortgang laden</b><small>Plak een eerder opgeslagen code</small></button>'+
+      '<button type="button" data-a="new" class="danger"><b>Nieuw spel starten</b><small>Begin helemaal opnieuw met een nieuwe held</small></button>'+
+      '</div><div class="mtoggles">'+
+            '<button type="button" class="tgl" id="tgsfx" aria-pressed="'+S.snd.sfx+'"><span>Geluidjes bij knoppen</span><i></i></button></div>'+
+      '<p class="mnote">Je voortgang wordt ook automatisch bewaard in deze browser. Een code heb je nodig als je op een ander apparaat verder wilt, of als je browsergegevens wist.</p>'+
+      '<button class="btn ghost" type="button" id="mclose">Sluiten</button><p class="mcredit">Huishoudheld · Made by Jasper with Claude</p>'+
+      '<button type="button" class="tlink" data-a="test"><svg viewBox="0 0 24 24" aria-hidden="true">'+(TESTMODE?'<path d="M7 11V8a5 5 0 0 1 9.6-2"/>':'<path d="M7 11V8a5 5 0 0 1 10 0v3"/>')+'<rect x="5" y="11" width="14" height="10" rx="2"/></svg>'+(TESTMODE?'Testmodus stoppen':'Testmodus')+'</button>';
+    $("tgsfx").onclick=()=>{S.snd.sfx=!S.snd.sfx;save();$("tgsfx").setAttribute("aria-pressed",S.snd.sfx);if(S.snd.sfx)sfx("check")};
+    body.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{const a=b.dataset.a;if(a==="held"){closeMenu();openMaker(true)}else if(a==="test"){TESTMODE?exitTest():openMenu("testpw")}else openMenu(a)});
+  }else if(view==="save"){
+    body.innerHTML='<h2>Voortgang opslaan</h2><p class="mnote">Kopieer deze code en bewaar hem op een veilige plek, bijvoorbeeld in je notities-app. Met de code zet je '+heroName()+' later terug, ook op een ander apparaat.</p>'+
+      '<textarea id="savecode" readonly rows="5"></textarea><div class="mrow"><button class="btn" type="button" id="copycode">Kopieer code</button><button class="btn ghost" type="button" id="mback">Terug</button></div><p class="mstatus" id="mstatus" aria-live="polite"></p>';
+    $("savecode").value=encodeSave();
+    $("copycode").onclick=()=>{const t=$("savecode");
+      const fb=()=>{t.focus();t.select();$("mstatus").textContent="Code geselecteerd. Kopieer hem met je toetsenbord of lang ingedrukt houden."};
+      try{navigator.clipboard.writeText(t.value).then(()=>{$("mstatus").textContent="Gekopieerd. Plak de code ergens waar je hem terugvindt."},fb)}catch(e){fb()}};
+  }else if(view==="load"){
+    body.innerHTML='<h2>Voortgang laden</h2><p class="mnote">Plak hieronder je code. Codes van oudere versies van het spel werken ook. Je huidige voortgang wordt dan vervangen.</p>'+
+      '<textarea id="loadcode" rows="5" placeholder="HH1:…"></textarea><label class="filepick">Of kies een bestand met de code<input type="file" id="loadfile" accept=".txt,.json,text/plain,application/json"></label><div class="mrow"><button class="btn" type="button" id="doload">Laden</button><button class="btn ghost" type="button" id="mback">Terug</button></div><p class="mstatus" id="mstatus" aria-live="polite"></p>';
+    $("doload").onclick=()=>{
+      let o;try{o=decodeSave($("loadcode").value)}catch(e){$("mstatus").textContent="Deze code werkt niet. Controleer of je hem helemaal hebt gekopieerd, inclusief HH1: aan het begin.";$("mstatus").className="mstatus bad";return}
+      loadSave(o);
+    };
+    $("loadfile").onchange=e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{$("loadcode").value=String(r.result||"");$("mstatus").textContent="Bestand ingelezen. Tik op Laden.";$("mstatus").className="mstatus"};r.readAsText(f)};
+  }else if(view==="focus"){
+    const sel=new Set(S.habits.filter(h=>h.star).map(h=>h.id));
+    const list=S.habits.slice().sort((x,y)=>(y.lv??-1)-(x.lv??-1));
+    body.innerHTML='<h2>Focustaken kiezen</h2><p class="mnote">Kies hoogstens '+MAX_FOCUS+' taken waar je de komende tijd extra op wilt oefenen. Ze staan bovenaan en leveren +'+FOCUS_BONUS+' XP extra op. De taken die het meeste moeite kosten staan bovenaan dit lijstje.</p>'+
+      '<p class="fcount" id="fcount" aria-live="polite"></p><div class="xlist flist" id="flist"></div>'+
+      '<div class="mrow"><button class="btn" type="button" id="fsave">Opslaan</button><button class="btn ghost" type="button" id="fauto">Laat de app kiezen</button></div>'+
+      '<button class="linkbtn" type="button" id="mclose">Annuleren</button>';
+    const box=$("flist");
+    const upd=()=>{$("fcount").textContent=sel.size+" van "+MAX_FOCUS+" gekozen";
+      box.querySelectorAll(".xopt").forEach(b=>{const on=sel.has(b.dataset.id);b.setAttribute("aria-pressed",on);b.classList.toggle("off",!on&&sel.size>=MAX_FOCUS)})};
+    list.forEach(h=>{
+      const b=document.createElement("button");b.type="button";b.className="xopt";b.dataset.id=h.id;
+      const lv=typeof h.lv==="number"?h.lv:null;
+      b.innerHTML='<span class="xbox" aria-hidden="true"></span><span class="xt"></span>'+(lv!=null?faceSVG(lv):'');
+      const t=b.querySelector(".xt");t.textContent=h.t;const sm=document.createElement("small");
+      sm.textContent=(lv!=null?LEVELS[lv].t:"Nog niet beoordeeld")+(h.freq==="week"?" · wekelijks":"");t.appendChild(sm);
+      b.onclick=()=>{if(sel.has(h.id))sel.delete(h.id);else if(sel.size>=MAX_FOCUS){$("fcount").textContent="Je hebt al "+MAX_FOCUS+" taken gekozen. Haal er eerst één weg.";return}else sel.add(h.id);upd()};
+      box.appendChild(b);
+    });
+    upd();
+    $("fsave").onclick=()=>{S.habits.forEach(h=>{h.star=sel.has(h.id)});S.focusManual=true;save();closeMenu();renderHabits();
+      pop(sel.size?"Focus opgeslagen ("+sel.size+")":"Geen focustaken gekozen")};
+    $("fauto").onclick=()=>{S.focusManual=false;S.habits.forEach(h=>{h.star=false});const f=autoFocus(true);save();closeMenu();renderHabits();
+      pop(f.length?"De app koos: "+f.map(h=>h.t).join(", "):"Nog geen taken om op te focussen. Vul eerst de vragenlijst in.")};
+  }else if(view==="testpw"){
+    body.innerHTML='<h2>Testmodus</h2><p class="mnote">Voer het wachtwoord in om de testmodus te openen. Je echte voortgang blijft onaangeroerd.</p>'+
+      '<form id="tpwform" class="tpwform"><label class="mkl" for="tpw">Wachtwoord</label><input id="tpw" type="password" autocomplete="off" autocapitalize="off" spellcheck="false">'+
+      '<div class="mrow"><button class="btn" type="submit">Openen</button><button class="btn ghost" type="button" id="mback">Terug</button></div></form><p class="mstatus" id="mstatus" aria-live="polite"></p>';
+    $("tpwform").addEventListener("submit",e=>{e.preventDefault();
+      if(pwHash($("tpw").value)===TEST_PW_HASH){enterTest()}
+      else{$("mstatus").textContent="Dat wachtwoord klopt niet. Let op hoofdletters.";$("mstatus").className="mstatus bad";$("tpw").select()}});
+  }else if(view==="new"){
+    body.innerHTML='<h2>Nieuw spel starten?</h2><p class="mnote">Al je XP, missies, records en checks worden gewist. Je held begint weer bij level 1. Dit kun je niet ongedaan maken, tenzij je eerst je voortgang opslaat.</p>'+
+      '<div class="mrow"><button class="btn danger" type="button" id="donew">Ja, opnieuw beginnen</button><button class="btn ghost" type="button" id="dosave">Eerst opslaan</button></div>'+
+      '<button class="linkbtn" type="button" id="mback">Annuleren</button>';
+    $("dosave").onclick=()=>openMenu("save");
+    $("donew").onclick=()=>{
+      S={xp:0,habits:DEFAULTS.slice(),days:{},bestBy:{},history:[]};save();
+      closeMenu();restart(true);
+    };
+  }
+  if($("mclose"))$("mclose").onclick=closeMenu;
+  if($("mback"))$("mback").onclick=()=>openMenu();
+  const f=body.querySelector("button,textarea");f&&f.focus();
+}
+function closeMenu(){$("menu").hidden=true}
+function restart(fresh){
+  applyLook();renderHabits();renderStats();showBest();renderCheckNote();
+  if(fresh||!S.look)openMaker(false);else if(!S.history.length||isDue())startIntake();else showView("dag");
+}
+$("menubtn").onclick=()=>openMenu();
+$("menu").addEventListener("click",e=>{if(e.target.id==="menu")closeMenu()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("menu").hidden)closeMenu()});
+
+/* ---- Geluid: zachte geluidjes bij knoppen, gemaakt met Web Audio ---- */
+S.snd=Object.assign({sfx:true},S.snd||{});
+const AU={ctx:null,master:null,music:null,sfx:null,rev:null,timer:null,next:0,step:0,last:0};
+const mtof=m=>440*Math.pow(2,(m-69)/12);
+function makeImpulse(c,sec){
+  const len=Math.floor(c.sampleRate*sec),b=c.createBuffer(2,len,c.sampleRate);
+  for(let ch=0;ch<2;ch++){const d=b.getChannelData(ch);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3.2)}
+  return b;
+}
+function auInit(){
+  if(AU.ctx)return true;
+  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;
+  try{
+    const c=AU.ctx=new AC();
+    const comp=c.createDynamicsCompressor();comp.threshold.value=-20;comp.ratio.value=3;comp.attack.value=.01;comp.release.value=.3;comp.connect(c.destination);
+    AU.master=c.createGain();AU.master.gain.value=.85;AU.master.connect(comp);
+    // galm
+    AU.rev=c.createConvolver();AU.rev.buffer=makeImpulse(c,2.8);
+    const revOut=c.createGain();revOut.gain.value=.5;AU.rev.connect(revOut);revOut.connect(AU.master);
+    // muziekbus: warm gefilterd, flink in de galm
+    AU.music=c.createGain();AU.music.gain.value=0;
+    const lp=c.createBiquadFilter();lp.type="lowpass";lp.frequency.value=3500;lp.Q.value=.3;
+    AU.music.connect(lp);lp.connect(AU.master);
+    const ms=c.createGain();ms.gain.value=.3;lp.connect(ms);ms.connect(AU.rev);
+    // geluidjesbus: droog met een vleugje galm
+    AU.sfx=c.createGain();AU.sfx.gain.value=.5;AU.sfx.connect(AU.master);
+    const ss=c.createGain();ss.gain.value=.25;AU.sfx.connect(ss);ss.connect(AU.rev);
+    return true;
+  }catch(e){AU.ctx=null;return false}
+}
+function env(g,t,att,peak,dur){g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(peak,t+att);g.gain.exponentialRampToValueAtTime(.0001,t+dur)}
+function pan(dest,p){const c=AU.ctx;if(!c.createStereoPanner)return dest;const s=c.createStereoPanner();s.pan.value=p;s.connect(dest);return s}
+/* elektrische piano (FM): zacht aangeslagen, klinkt lang na */
+function ep(dest,f,t,dur,vol,p){
+  const c=AU.ctx,out=pan(dest,p||0);
+  [[1,1],[1.0035,.45]].forEach(([det,lv])=>{
+    const car=c.createOscillator(),mod=c.createOscillator(),mg=c.createGain(),g=c.createGain();
+    car.frequency.value=f*det;mod.frequency.value=f*det;
+    mg.gain.setValueAtTime(f*1.6,t);mg.gain.exponentialRampToValueAtTime(f*.12,t+.45);
+    mod.connect(mg);mg.connect(car.frequency);car.connect(g);g.connect(out);
+    env(g,t,.006,vol*lv,dur);
+    car.start(t);mod.start(t);car.stop(t+dur+.05);mod.stop(t+dur+.05);
+  });
+}
+/* belletje (FM met hoge verhouding): helder maar rond */
+function bell(dest,f,t,dur,vol,p){
+  const c=AU.ctx,out=pan(dest,p||0);
+  const car=c.createOscillator(),mod=c.createOscillator(),mg=c.createGain(),g=c.createGain();
+  car.frequency.value=f;mod.frequency.value=f*3.5;
+  mg.gain.setValueAtTime(f*2.2,t);mg.gain.exponentialRampToValueAtTime(f*.05,t+dur*.6);
+  mod.connect(mg);mg.connect(car.frequency);car.connect(g);g.connect(out);
+  env(g,t,.003,vol,dur);
+  car.start(t);mod.start(t);car.stop(t+dur+.05);mod.stop(t+dur+.05);
+}
+/* warme pad: twee licht ontstemde zaagtanden door een laagdoorlaatfilter */
+function pad(dest,notes,t,dur,vol){
+  const c=AU.ctx,lp=c.createBiquadFilter(),g=c.createGain();
+  lp.type="lowpass";lp.frequency.setValueAtTime(500,t);lp.frequency.linearRampToValueAtTime(1100,t+dur*.5);lp.frequency.linearRampToValueAtTime(600,t+dur);
+  lp.connect(g);g.connect(dest);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+1.1);g.gain.setValueAtTime(vol,t+dur-.6);g.gain.linearRampToValueAtTime(0,t+dur+.9);
+  notes.forEach(m=>[-7,7].forEach(cents=>{const o=c.createOscillator();o.type="sawtooth";o.frequency.value=mtof(m);o.detune.value=cents;o.connect(lp);o.start(t);o.stop(t+dur+1)}));
+}
+function bass(dest,f,t,dur,vol){
+  const c=AU.ctx,o=c.createOscillator(),o2=c.createOscillator(),g=c.createGain(),lp=c.createBiquadFilter();
+  lp.type="lowpass";lp.frequency.value=320;o.frequency.value=f;o2.type="triangle";o2.frequency.value=f;
+  const g2=c.createGain();g2.gain.value=.35;o2.connect(g2);g2.connect(lp);o.connect(lp);lp.connect(g);g.connect(dest);
+  env(g,t,.03,vol,dur);o.start(t);o2.start(t);o.stop(t+dur+.05);o2.stop(t+dur+.05);
+}
+function woodTick(dest,t,vol){
+  const c=AU.ctx,o=c.createOscillator(),g=c.createGain();
+  o.frequency.setValueAtTime(820,t);o.frequency.exponentialRampToValueAtTime(420,t+.04);
+  o.connect(g);g.connect(dest);env(g,t,.002,vol,.06);o.start(t);o.stop(t+.1);
+}
+/* korte stemmetjes voor knoppen */
+let NOISE=null;
+function noiseBuf(){if(NOISE)return NOISE;const c=AU.ctx,b=c.createBuffer(1,c.sampleRate,c.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;return NOISE=b}
+function blip(f1,f2,t,dur,vol,type){
+  const c=AU.ctx,o=c.createOscillator(),g=c.createGain();o.type=type||"sine";
+  o.frequency.setValueAtTime(f1,t);o.frequency.exponentialRampToValueAtTime(f2,t+dur*.8);
+  o.connect(g);g.connect(AU.sfx);env(g,t,.003,vol,dur);o.start(t);o.stop(t+dur+.05);
+}
+function mallet(f,t,vol){ // kort marimba-tikje
+  const c=AU.ctx;[[1,1,.22],[4,.2,.05]].forEach(([r,lv,d])=>{const o=c.createOscillator(),g=c.createGain();o.frequency.value=f*r;o.connect(g);g.connect(AU.sfx);env(g,t,.002,vol*lv,d);o.start(t);o.stop(t+d+.05)});
+}
+function swish(f1,f2,t,dur,vol){
+  const c=AU.ctx,src=c.createBufferSource(),bp=c.createBiquadFilter(),g=c.createGain();
+  src.buffer=noiseBuf();bp.type="bandpass";bp.Q.value=1.4;bp.frequency.setValueAtTime(f1,t);bp.frequency.exponentialRampToValueAtTime(f2,t+dur);
+  src.connect(bp);bp.connect(g);g.connect(AU.sfx);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+dur*.4);g.gain.linearRampToValueAtTime(0,t+dur);
+  src.start(t,Math.random()*.5);src.stop(t+dur+.05);
+}
+const PENTA=[72,74,76,79,81,84,86];
+/* geluidjes */
+const SFX={
+  tap:t=>woodTick(AU.sfx,t,.22),
+  soft:t=>blip(1100,850,t,.035,.08),
+  nav:t=>blip(950,760,t,.04,.1),
+  rung:(t,i)=>mallet(mtof([79,78,77,76,74][i||0]),t,.17),
+  on:t=>blip(700,880,t,.06,.13),
+  off:t=>blip(820,600,t,.06,.11),
+  pick:t=>blip(520,660,t,.05,.13,"triangle"),
+  confirm:t=>{mallet(mtof(79),t,.18);mallet(mtof(84),t+.06,.12)},
+  open:t=>swish(700,1800,t,.1,.05),
+  close:t=>swish(1600,700,t,.09,.045),
+  bubble:t=>blip(520,700,t,.05,.12),
+  reveal:t=>bell(AU.sfx,mtof(88),t,.45,.06),
+  boing:t=>{const c=AU.ctx,o=c.createOscillator(),g=c.createGain();o.frequency.setValueAtTime(300,t);o.frequency.exponentialRampToValueAtTime(430,t+.06);o.frequency.exponentialRampToValueAtTime(330,t+.16);o.connect(g);g.connect(AU.sfx);env(g,t,.005,.14,.18);o.start(t);o.stop(t+.22)},
+  check:t=>{bell(AU.sfx,mtof(84),t,.7,.16,-.15);bell(AU.sfx,mtof(91),t+.08,.9,.14,.15)},
+  uncheck:t=>{ep(AU.sfx,mtof(76),t,.4,.16);ep(AU.sfx,mtof(71),t+.07,.5,.14)},
+  good:t=>{bell(AU.sfx,mtof(88),t,.6,.15,-.2);bell(AU.sfx,mtof(95),t+.06,.8,.12,.2)},
+  bad:t=>{const c=AU.ctx,o=c.createOscillator(),g=c.createGain(),lp=c.createBiquadFilter();lp.type="lowpass";lp.frequency.value=600;
+    o.type="triangle";o.frequency.setValueAtTime(240,t);o.frequency.exponentialRampToValueAtTime(150,t+.18);o.connect(lp);lp.connect(g);g.connect(AU.sfx);env(g,t,.01,.35,.3);o.start(t);o.stop(t+.35)},
+  level:t=>{[72,76,79].forEach((m,i)=>ep(AU.sfx,mtof(m),t+i*.12,.7,.11,(i-1)*.2))},
+  start:t=>{ep(AU.sfx,mtof(72),t,.6,.16);ep(AU.sfx,mtof(79),t+.1,.8,.16)},
+  done:t=>{ep(AU.sfx,mtof(76),t,.5,.1);ep(AU.sfx,mtof(79),t+.1,.6,.1)}
+};
+function sfx(name,arg){
+  AU.last=performance.now();
+  if(!S.snd.sfx||!auInit())return;
+  if(AU.ctx.state==="suspended")AU.ctx.resume();
+  try{SFX[name](AU.ctx.currentTime+.01,arg)}catch(e){}
+}
+/* elke knop zonder eigen geluid krijgt een zacht tikje */
+/* elke knop zonder eigen geluid krijgt een zacht tikje */
+document.addEventListener("click",e=>{if(e.target.closest("button")&&performance.now()-AU.last>40)sfx("tap")});
+document.addEventListener("visibilitychange",()=>{if(!AU.ctx)return;if(document.hidden)AU.ctx.suspend();else AU.ctx.resume()});
+
+/* ---- Testmodus: alles uitproberen in een aparte testversie ---- */
+/* wachtwoord voor de testmodus (alleen de hash staat in de code) */
+const TEST_PW_HASH="2e4b9atzrda";
+function pwHash(str){let h1=0xdeadbeef^7,h2=0x41c6ce57^7;for(let i=0;i<str.length;i++){const c=str.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}
+h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);return (4294967296*(2097151&h2)+(h1>>>0)).toString(36)}
+function enterTest(){
+  const real=lsGet(REAL_KEY);if(real)lsSet(TEST_KEY,real);else lsDel(TEST_KEY);
+  lsSet(TEST_KEY+"-cfg",JSON.stringify({doff:0,fast:false}));lsSet(TM_FLAG,"1");location.reload();
+}
+function exitTest(){lsDel(TM_FLAG);location.reload()}
+function setCfg(o){lsSet(TEST_KEY+"-cfg",JSON.stringify(Object.assign({},TCFG,o)));location.reload()}
+function fillDays(){
+  S.given=S.given||{};S.xpDay=S.xpDay||{};const weeks={};let total=0;
+  for(let i=14;i>=1;i--){
+    const k=addDays(today(),-i);const [y,m,d]=k.split("-").map(Number);const dow=(new Date(y,m-1,d,12).getDay()+6)%7;const wk=addDays(k,-dow);
+    const arr=S.days[k]=S.days[k]||[];let dayXP=0;
+    S.habits.forEach(h=>{
+      if(arr.includes(h.id))return;
+      if(h.freq==="week"){if(weeks[wk+h.id]||Math.random()>.3)return;weeks[wk+h.id]=1}
+      else if(Math.random()>(h.lv>=3?.35:.65))return;
+      arr.push(h.id);const x=h.xp+(h.star?FOCUS_BONUS:0);S.given[k+"|"+h.id]=x;dayXP+=x;
+    });
+    S.xpDay[k]=(S.xpDay[k]||0)+dayXP;total+=dayXP;
+  }
+  S.xp+=total;S.bestL=Math.max(S.bestL||0,lvInfo(S.xp).l);save();location.reload();
+}
+if(TESTMODE){
+  $("testbar").hidden=false;
+  const dn=nowD().toLocaleDateString("nl-NL",{weekday:"long",day:"numeric",month:"long"});
+  $("tbdate").textContent="Testdatum: "+dn+(DOFF?" ("+(DOFF>0?"+":"")+DOFF+(Math.abs(DOFF)===1?" dag)":" dagen)"):"");
+  $("tbfast").textContent="Snelle timers: "+(TCFG.fast?"aan":"uit");$("tbfast").setAttribute("aria-pressed",!!TCFG.fast);
+  $("tbtoggle").onclick=()=>{const t=$("tbtools"),open=t.hidden;t.hidden=!open;$("tbtoggle").setAttribute("aria-expanded",open);$("tbtoggle").textContent=open?"Verbergen":"Testknoppen"};
+  $("tbtools").addEventListener("click",e=>{
+    const b=e.target.closest("[data-t]");if(!b)return;const t=b.dataset.t;
+    if(t==="d-1")setCfg({doff:DOFF-1});else if(t==="d+1")setCfg({doff:DOFF+1});else if(t==="d+7")setCfg({doff:DOFF+7});else if(t==="d0")setCfg({doff:0});
+    else if(t==="xp50")addXP(50,"test");else if(t==="xp500")addXP(500,"test");
+    else if(t==="lvl"){const I=lvInfo(S.xp);addXP(I.to-S.xp,"test")}
+    else if(t==="fill")fillDays();
+    else if(t==="check"){S.nextCheck=today();save();startIntake()}
+    else if(t==="fast")setCfg({fast:!TCFG.fast});
+    else if(t==="fresh"){lsDel(TEST_KEY);location.reload()}
+    else if(t==="copy"){const r=lsGet(REAL_KEY);if(r)lsSet(TEST_KEY,r);else lsDel(TEST_KEY);location.reload()}
+    else if(t==="stop")exitTest();
+  });
+}
+
+/* ---- tabs ---- */
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>showView(b.dataset.tab));
+
+S.bestL=Math.max(S.bestL||0,lvInfo(S.xp).l);
+if(!S.focusInit){autoFocus();S.focusInit=true}
+save();
+try{if(sessionStorage.getItem(KEY+"-loaded")){sessionStorage.removeItem(KEY+"-loaded");setTimeout(()=>pop("Voortgang geladen. Welkom terug, "+heroName()+"!"),500)}}catch(e){}
+renderZones();renderHabits();renderStats();
+applyLook();renderStats();renderCheckNote();
+if(!S.look)openMaker(false);else if(!S.history.length||isDue())startIntake();
+})();
+</script>
+
+
+
+<script>
+/* ---- Installeerbare app: offline werken, installeren en updates ---- */
+(function(){
+  const isStandalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+  const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+  let deferred=null;
+  const APP_VER="5907b29b",APP_DATE="05-11-2026";
+  let REG=null;const hadController=!!(navigator.serviceWorker&&navigator.serviceWorker.controller);
+  if("serviceWorker" in navigator&&location.protocol!=="file:"){
+    navigator.serviceWorker.register("sw.js",{updateViaCache:"none"}).then(reg=>{
+      REG=reg;
+      reg.addEventListener("updatefound",()=>{const w=reg.installing;if(!w)return;
+        w.addEventListener("statechange",()=>{if(w.state==="activated"&&hadController)showUpdate()})});
+    }).catch(()=>{});
+    // als er een nieuwe versie actief wordt terwijl de app open staat
+    navigator.serviceWorker.addEventListener("controllerchange",()=>{if(hadController)showUpdate()});
+    // bij terugkeren naar de app opnieuw kijken of er iets nieuws is
+    document.addEventListener("visibilitychange",()=>{if(!document.hidden&&REG)REG.update().catch(()=>{})});
+  }
+  async function checkUpdate(btn){
+    btn.textContent="Bezig met zoeken…";
+    try{
+      const r=await fetch("index.html?check="+Date.now(),{cache:"no-store"});const t=await r.text();const m=t.match(/APP_VER="([^"]+)"/);
+      if(m&&m[1]!==APP_VER){btn.textContent="Nieuwe versie gevonden. Even geduld…";if(REG)await REG.update().catch(()=>{});setTimeout(()=>location.reload(),800)}
+      else btn.textContent="Je hebt de nieuwste versie";
+    }catch(e){btn.textContent="Geen internet. Probeer het later opnieuw."}
+  }
+  function showUpdate(){
+    if(document.getElementById("pwaupd"))return;
+    const b=document.createElement("button");b.id="pwaupd";b.type="button";b.className="pwaupd";
+    b.textContent="Er is een nieuwe versie. Tik om te vernieuwen.";b.onclick=()=>location.reload();document.body.appendChild(b);
+  }
+  addEventListener("beforeinstallprompt",e=>{e.preventDefault();deferred=e;addInstall()});
+  addEventListener("appinstalled",()=>{deferred=null;const b=document.getElementById("installbtn");if(b)b.remove()});
+  function addInstall(){
+    const list=document.querySelector("#menubody .mlist");if(!list||document.getElementById("installbtn")||isStandalone)return;
+    if(!deferred&&!isIOS)return;
+    const b=document.createElement("button");b.type="button";b.id="installbtn";
+    b.innerHTML="<b>Installeer als app</b><small>"+(deferred?"Zet Huishoudheld op je beginscherm":"Tik op Deel en kies Zet op beginscherm")+"</small>";
+    b.onclick=async()=>{
+      if(deferred){deferred.prompt();try{await deferred.userChoice}catch(e){}deferred=null;b.remove()}
+      else{const s=b.querySelector("small");s.textContent="Open dit in Safari, tik onderin op het Deel-icoon (vierkant met pijl omhoog) en kies Zet op beginscherm."}
+    };
+    list.insertBefore(b,list.firstChild);
+  }
+  function addVersion(){
+    const body=document.getElementById("menubody");if(!body.querySelector(".mlist")||document.getElementById("verline"))return;
+    const d=document.createElement("div");d.id="verline";d.className="verline";
+    d.innerHTML='<span>Versie '+APP_DATE+' · '+APP_VER+'</span><button type="button" id="updbtn">Op updates controleren</button>';
+    body.appendChild(d);document.getElementById("updbtn").onclick=e=>checkUpdate(e.currentTarget);
+  }
+  new MutationObserver(()=>{addInstall();addVersion()}).observe(document.getElementById("menubody"),{childList:true});
+})();
+</script>
+</body>
+</html>

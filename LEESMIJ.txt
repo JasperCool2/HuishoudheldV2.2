@@ -1,0 +1,39 @@
+HUISHOUDHELD - zo zet je de app online
+=======================================
+
+Deze map is de complete app. Hij werkt pas als installeerbare app als hij
+via https online staat. Dubbelklikken op index.html werkt wel, maar dan
+kun je hem niet installeren en werkt hij niet offline.
+
+ONLINE ZETTEN (gratis, ongeveer 2 minuten)
+1. Pak het zip-bestand uit. Je krijgt de map "huishoudheld".
+2. Ga op een computer naar https://app.netlify.com/drop
+3. Sleep de hele map "huishoudheld" naar het vak op die pagina.
+4. Je krijgt meteen een link, bijvoorbeeld https://iets-willekeurigs.netlify.app
+   Maak een gratis account om de link te bewaren en een eigen naam te kiezen,
+   bijvoorbeeld https://huishoudheld.netlify.app
+
+Andere mogelijkheden: GitHub Pages of Cloudflare Pages. Zet de bestanden uit
+deze map in de hoofdmap van je site.
+
+INSTALLEREN OP JE TELEFOON
+- iPhone: open de link in Safari, tik op Deel (vierkant met pijl omhoog)
+  en kies "Zet op beginscherm".
+- Android: open de link in Chrome. Kies "App installeren" in het menu of
+  via de knop "Installeer als app" in het menu van Huishoudheld.
+
+JE VOORTGANG MEENEMEN
+De app bewaart je voortgang op het toestel zelf. Wil je verder met je
+voortgang uit een eerdere versie (bijvoorbeeld de versie in Claude):
+1. Open de oude versie en kies Menu > Voortgang opslaan > Kopieer code.
+2. Open de NIEUWE app (op een iPhone: de geinstalleerde app zelf, niet Safari)
+   en kies Menu > Voortgang laden. Plak de code en tik op Laden.
+Codes van alle eerdere versies werken. Enters of tekst om de code heen
+zijn geen probleem.
+
+EEN NIEUWE VERSIE PLAATSEN
+Sleep de nieuwe map naar je Netlify-site (tabblad Deploys). Wie de app al
+heeft, ziet bij de volgende keer openen de melding dat er een nieuwe versie
+is. De voortgang blijft bewaard.
+
+Made by Jasper with Claude
